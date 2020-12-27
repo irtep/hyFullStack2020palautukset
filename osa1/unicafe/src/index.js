@@ -1,26 +1,27 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import { Button, Statistics, anecdotes } from './components.js'
+import { Button, Statistics, Anecdote, anecdotes } from './components.js'
 import { callDice } from './functions.js'
 
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [showAne, setAne] = useState('')
 
   const newGood = () => {
-    setGood(good + 1)
+    setGood(good + 1);
   }
   const newNeutral = () => {
-    setNeutral(neutral + 1)
+    setNeutral(neutral + 1);
   }
   const newBad = () => {
-    setBad(bad + 1)
+    setBad(bad + 1);
   }
   const showAnecdote = () => {
-    const randomAne = anecdotes[callDice(anecdotes.length-1)];
-    document.getElementById('anecsHere').innerHTML = randomAne;
+    const randomAne = callDice(anecdotes.length-1, showAne);
+    setAne(randomAne);
   }
 
   return (
@@ -37,11 +38,14 @@ const App = () => {
         <Statistics goods= {good} neutrals= {neutral} bads= {bad}/>
       </div>
       <div>
+        <div>
+        <br/>
         click that to get anecdote =>
         <Button name= "get anecdote" ifClicked= {showAnecdote}/>
-        <br/><br/><br/>
+        </div>
       </div>
       <div id= "anecsHere">
+        <Anecdote chosen= {showAne}/>
       </div>
     </div>
   )

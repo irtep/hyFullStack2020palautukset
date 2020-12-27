@@ -11,6 +11,23 @@ export const anecdotes = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ];
 
+const TheMostPopular = ({text, votes}) => {
+  if (votes === 0) {
+    return(
+      <>
+        No votes given yet.
+      </>
+    );
+  } else {
+    return(
+      <>
+        <strong>{text}</strong> <br/>
+        with <strong>{votes}</strong> votes.
+      </>
+    );
+  }
+}
+
 const StatisticsLine = ({text, value}) => {
   return(
     <>
@@ -24,12 +41,59 @@ const StatisticsLine = ({text, value}) => {
   );
 }
 
+export const Anecdote = ({chosen}) => {
+  const [votes, addVotes] = useState([0, 0, 0, 0, 0, 0]);
+  const [mostPopular, setPopular] = useState(['all have 0 votes.', 0]);
+
+  const addVote = () => {
+    const copy = [...votes ];
+    copy[chosen] += 1;
+    addVotes(copy);
+    // check which is the most popular now
+    const populars = [ ...mostPopular ];
+    copy.forEach((item, i) => {
+      if (item > populars[1]) {
+        populars[0] = anecdotes[i];
+        populars[1] = item;
+      }
+    });
+    setPopular(populars);
+  }
+
+  if (chosen === '') {
+    return(
+      <>
+        if you want to see anecdote, click that button above.
+      </>
+    );
+  } else {
+    return(
+      <div>
+        <p>
+          <strong>
+            {anecdotes[chosen]}
+          </strong>
+        </p>
+        <p>
+          this has votes: {votes[chosen]}
+        </p>
+        <p>
+          <Button name= 'Vote this' ifClicked= {addVote}/>
+        </p>
+        <div>
+          The most voted anecrote: <br/>
+          <p>
+            <TheMostPopular text= {mostPopular[0]} votes= {mostPopular[1]}/>
+          </p>
+        </div>
+      </div>
+    );
+  }
+}
+
 export const Statistics = ({goods, neutrals, bads}) => {
   const all = goods + neutrals + bads;
   let goodPercentage = goods / all * 100;
-  let neutralPercentage = neutrals / all * 100;
-  let badPercentage = bads / all * 100;
-  let showPercentage = ' - No results yet.';
   const weights = [
     {nro: goods, weight: 1},
     {nro: neutrals, weight: 0},
