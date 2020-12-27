@@ -8,7 +8,11 @@ export const giveWeightedAverage = (weights, all) => {
     return result;
   };
 
-export const callDice = (max) => {
-    const result =  1 + Math.floor(Math.random() * max);
+export const callDice = (max, currentValue) => {
+    let result =  currentValue;
+    // i want always value to change
+    for (;result == currentValue;) {
+      result = 1 + Math.floor(Math.random() * max)
+    }
     return result;
 }
