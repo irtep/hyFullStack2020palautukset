@@ -1,14 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-export const Total = (props) => {
-  let exes = 0;
-  props.parts.forEach((item, i) => {
-    exes += item.exercises;
-  });
+export const Total = ({parts}) => {
+  let sum = parts.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0);
+
   return (
     <>
-      Number of exercices {exes}
+      Number of exercices {sum}
     </>
   )
 }
+export default Total;
