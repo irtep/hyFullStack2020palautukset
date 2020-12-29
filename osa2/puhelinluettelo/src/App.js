@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import ShowPersons from './components/ShowPersons';
+import axios from 'axios';
 
 const App = () => {
-  const [ persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]);
+  const [ persons, setPersons] = useState([]);
   const [ newName, setNewName ] = useState({name: '', number: ''});
   const [ showThese, setShow ] = useState([]);
 
+  // get persons from db on start
+  useEffect( () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+        setShow(response.data)
+      })
+  }, []);
+
+  // handle changes
   const handleNameChange = (event) => {
     const entryCopied = newName;
     entryCopied.name = event.target.value;
@@ -24,6 +31,8 @@ const App = () => {
     entryCopied.number = event.target.value;
     setNewName(entryCopied);
   }
+
+  // add new entry
   const addNew = (event) => {
     event.preventDefault();
     const noteObject = {
@@ -40,6 +49,8 @@ const App = () => {
     }
     setNewName({name: '', number: ''});
   }
+
+  // filter what to show
   const filtering = (event) => {
     const lowCaseAll = event.target.value.toLowerCase();
     if (event.target.value !== '') {
