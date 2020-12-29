@@ -6,6 +6,7 @@ import ShowData from './components/ShowData';
 const App = () => {
   const [ allData, setData] = useState([]);
   const [ showData, setShow ] = useState([]);
+  const weatherApiKey = process.env.REACT_APP_WEATHERAPIKEY;
 
   // get countries from api on start
   useEffect( () => {
@@ -38,13 +39,22 @@ const App = () => {
       setShow([]);
     }
   }
+  // shows country that comes from show buttons
+  const showByClick = (event) => {
+    const showing = allData.filter( entry => entry.name === event.target.id);
+    setShow(showing);
+  }
 
   return (
     <div className="App">
 
       <Finder actions= {filtering}/>
 
-      <ShowData showThese = {showData}/>
+      <ShowData
+        showThese = {showData}
+        showByClick = {showByClick}
+        weatherApiKey = {weatherApiKey}
+      />
 
     </div>
   );
