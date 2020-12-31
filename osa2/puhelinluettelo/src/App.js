@@ -3,12 +3,14 @@ import Header from './components/Header';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import ShowPersons from './components/ShowPersons';
+import Notification from './components/Notification';
 import dbServices from './services/dbControl';
 
 const App = () => {
   const [ persons, setPersons] = useState([]);
   const [ newName, setNewName ] = useState({name: '', number: ''});
   const [ showThese, setShow ] = useState([]);
+  const [ notificationMsg, setMsg] = useState({msg: null, badNews: false});
 
   // get persons from db on start
   useEffect( () => {
@@ -51,6 +53,9 @@ const App = () => {
       setShow(newList);
       // update to db
       dbServices.create(noteObject).catch(err => console.log('error on adding to database!', err));
+      // make notification
+      setMsg({msg: `added ${noteObject.name}!`, badNews: false});
+      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
     } else if (dublicatedList.length !== 0){
       //alert(`${newName.name} is already added`);
       //
@@ -69,6 +74,9 @@ const App = () => {
            })
          }
        ).catch(err => console.log('error on adding to database!', err));
+       // make notification
+       setMsg({msg: `updated number of ${noteObject.name}!`, badNews: false});
+       setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
       }
     }
     setNewName({name: '', number: ''});
@@ -105,13 +113,33 @@ const App = () => {
              console.log('error on loading database!', error);
          })
        })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        // make notification
+        setMsg({msg: `info of ${event.target.name} has already been deleted from database!`, badNews: true});
+        setTimeout( () => { setMsg({msg: null, badNews: false}) }, 5000);
+          // reload modified db
+          dbServices
+            .getAll()
+            .then(initialData => {
+              setPersons(initialData)
+              setShow(initialData)
+            })
+            .catch(error => {
+              console.log('error on loading database!', error);
+          })
+      });
+      // make notification
+      setMsg({msg: `removed details of ${event.target.name}!`, badNews: false});
+      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
     }
   }
 
   return (
     <div>
         <Header name= "Phonebook"/>
+
+        <Notification message= {notificationMsg}/>
 
         <Filter actions= {filtering}/>
 
