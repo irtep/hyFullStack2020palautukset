@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import ShowPersons from './components/ShowPersons';
-import axios from 'axios';
+import dbServices from './services/dbControl';
 
 const App = () => {
   const [ persons, setPersons] = useState([]);
@@ -12,12 +12,15 @@ const App = () => {
 
   // get persons from db on start
   useEffect( () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-        setShow(response.data)
+    dbServices
+      .getAll()
+      .then(initialData => {
+        setPersons(initialData)
+        setShow(initialData)
       })
+      .catch(error => {
+        console.log('error on loading database!', error);
+    })
   }, []);
 
   // handle changes
@@ -42,12 +45,36 @@ const App = () => {
     const dublicatedList = persons.filter( pers => pers.name === noteObject.name);
 
     if (newName.name !== '' && dublicatedList.length === 0){
+      // not dublicated, can add
       const newList = persons.concat(noteObject);
       setPersons(newList);
+      setShow(newList);
+      // update to db
+      dbServices.create(noteObject).catch(err => console.log('error on adding to database!', err));
     } else if (dublicatedList.length !== 0){
-      alert(`${newName.name} is already added`);
+      //alert(`${newName.name} is already added`);
+      //
+      if (window.confirm(`${newName.name} is already added, replace new number with old?`)) {
+        dbServices.update(dublicatedList[0].id, noteObject)
+         .then( () => {
+           // reload modified db
+           dbServices
+             .getAll()
+             .then(initialData => {
+               setPersons(initialData)
+               setShow(initialData)
+             })
+             .catch(error => {
+               console.log('error on loading database!', error);
+           })
+         }
+       ).catch(err => console.log('error on adding to database!', err));
+      }
     }
     setNewName({name: '', number: ''});
+    // empty fields
+    document.getElementById('nameField').value = '';
+    document.getElementById('numberField').value = '';
   }
 
   // filter what to show
@@ -61,6 +88,27 @@ const App = () => {
     }
   }
 
+  // delete function
+  const deleteThis = (event) => {
+    if (window.confirm(`really delete details of ${event.target.name}`)) {
+      // delete
+      dbServices.erase(event.target.id)
+       .then( () => {
+         // reload modified db
+         dbServices
+           .getAll()
+           .then(initialData => {
+             setPersons(initialData)
+             setShow(initialData)
+           })
+           .catch(error => {
+             console.log('error on loading database!', error);
+         })
+       })
+      .catch(err => console.log(err));
+    }
+  }
+
   return (
     <div>
         <Header name= "Phonebook"/>
@@ -70,14 +118,16 @@ const App = () => {
         <Header name= "Add a new"/>
 
         <PersonForm
-          addNew = {addNew}
+          addNew= {addNew}
           handleNameChange= {handleNameChange}
           handleNumberChange= {handleNumberChange}
         />
 
        <Header name= "Numbers"/>
 
-       <ShowPersons showThese= {showThese}/>
+       <ShowPersons
+         showThese= {showThese}
+         deleteFunc= {deleteThis}/>
     </div>
   )
 
