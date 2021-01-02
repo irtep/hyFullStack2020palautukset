@@ -17,6 +17,7 @@ const App = () => {
     dbServices
       .getAll()
       .then(initialData => {
+        console.log('ini data: ', initialData);
         setPersons(initialData)
         setShow(initialData)
       })
