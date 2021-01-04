@@ -17,7 +17,6 @@ const App = () => {
     dbServices
       .getAll()
       .then(initialData => {
-        console.log('ini data: ', initialData);
         setPersons(initialData)
         setShow(initialData)
       })
@@ -46,7 +45,6 @@ const App = () => {
       number: newName.number
     }
     const dublicatedList = persons.filter( pers => pers.name === noteObject.name);
-
     if (newName.name !== '' && dublicatedList.length === 0){
       // not dublicated, can add
       const newList = persons.concat(noteObject);
@@ -58,8 +56,7 @@ const App = () => {
       setMsg({msg: `added ${noteObject.name}!`, badNews: false});
       setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
     } else if (dublicatedList.length !== 0){
-      //alert(`${newName.name} is already added`);
-      //
+      // query if should add update
       if (window.confirm(`${newName.name} is already added, replace new number with old?`)) {
         dbServices.update(dublicatedList[0].id, noteObject)
          .then( () => {
@@ -84,6 +81,16 @@ const App = () => {
     // empty fields
     document.getElementById('nameField').value = '';
     document.getElementById('numberField').value = '';
+    // reload modified db
+    dbServices
+      .getAll()
+      .then(initialData => {
+        setPersons(initialData)
+        setShow(initialData)
+      })
+      .catch(error => {
+        console.log('error on loading database!', error);
+    })
   }
 
   // filter what to show
