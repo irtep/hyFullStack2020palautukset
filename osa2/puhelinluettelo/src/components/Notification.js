@@ -4,7 +4,6 @@ const goodStyle = {
 }
 
 const Notification = ({ message }) => {
-  console.log('this pops', message);
   if (message.msg === null) {
     return null
   } else {
