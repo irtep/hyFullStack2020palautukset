@@ -50,12 +50,24 @@ const App = () => {
     const dublicatedList = persons.filter( pers => pers.name === noteObject.name);
     if (newName.name !== '' && dublicatedList.length === 0){
       // not dublicated, can add
-      const newList = persons.concat(noteObject);
-      setPersons(newList);
-      setShow(newList);
       // update to db
       dbServices
         .create(noteObject)
+        .then( ()=> {
+          // reload modified db
+          dbServices
+            .getAll()
+            .then(initialData => {
+              setPersons(initialData)
+              setShow(initialData)
+            })
+            .catch(err => {
+              console.log('error', err.response);
+              // make notification
+              setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+              setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+            });
+        })
         .catch(err => {
           console.log('error', err.response);
           // make notification
@@ -100,21 +112,6 @@ const App = () => {
     // empty fields
     document.getElementById('nameField').value = '';
     document.getElementById('numberField').value = '';
-    // reload modified db
-    console.log('should reload persons now');
-    dbServices
-      .getAll()
-      .then(initialData => {
-        console.log('i data: ', initialData);
-        setPersons(initialData)
-        setShow(initialData)
-      })
-      .catch(err => {
-        console.log('error', err.response);
-        // make notification
-        setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
-        setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
-      });
   }
 
   // filter what to show
