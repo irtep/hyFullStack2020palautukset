@@ -20,9 +20,12 @@ const App = () => {
         setPersons(initialData)
         setShow(initialData)
       })
-      .catch(error => {
-        console.log('error on loading database!', error);
-    })
+      .catch(err => {
+        console.log('error', err.response);
+        // make notification
+        setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+        setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+      });
   }, []);
 
   // handle changes
@@ -47,14 +50,33 @@ const App = () => {
     const dublicatedList = persons.filter( pers => pers.name === noteObject.name);
     if (newName.name !== '' && dublicatedList.length === 0){
       // not dublicated, can add
-      const newList = persons.concat(noteObject);
-      setPersons(newList);
-      setShow(newList);
       // update to db
-      dbServices.create(noteObject).catch(err => console.log('error on adding to database!', err));
+      dbServices
+        .create(noteObject)
+        .then( ()=> {
+          // reload modified db
+          dbServices
+            .getAll()
+            .then(initialData => {
+              setPersons(initialData)
+              setShow(initialData)
+            })
+            .catch(err => {
+              console.log('error', err.response);
+              // make notification
+              setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+              setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+            });
+        })
+        .catch(err => {
+          console.log('error', err.response);
+          // make notification
+          setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+          setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+        });
       // make notification
       setMsg({msg: `added ${noteObject.name}!`, badNews: false});
-      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
+      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
     } else if (dublicatedList.length !== 0){
       // query if should add update
       if (window.confirm(`${newName.name} is already added, replace new number with old?`)) {
@@ -67,30 +89,29 @@ const App = () => {
                setPersons(initialData)
                setShow(initialData)
              })
-             .catch(error => {
-               console.log('error on loading database!', error);
-           })
+             .catch(err => {
+               console.log('error', err.response);
+               // make notification
+               setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+               setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+             });
          }
-       ).catch(err => console.log('error on adding to database!', err));
+       )
+       .catch(err => {
+         console.log('error', err.response);
+         // make notification
+         setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+         setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+       });
        // make notification
        setMsg({msg: `updated number of ${noteObject.name}!`, badNews: false});
-       setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
+       setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
       }
     }
     setNewName({name: '', number: ''});
     // empty fields
     document.getElementById('nameField').value = '';
     document.getElementById('numberField').value = '';
-    // reload modified db
-    dbServices
-      .getAll()
-      .then(initialData => {
-        setPersons(initialData)
-        setShow(initialData)
-      })
-      .catch(error => {
-        console.log('error on loading database!', error);
-    })
   }
 
   // filter what to show
@@ -117,15 +138,18 @@ const App = () => {
              setPersons(initialData)
              setShow(initialData)
            })
-           .catch(error => {
-             console.log('error on loading database!', error);
-         })
+           .catch(err => {
+             console.log('error', err.response);
+             // make notification
+             setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+             setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+           });
        })
       .catch(err => {
         console.log(err);
         // make notification
         setMsg({msg: `info of ${event.target.name} has already been deleted from database!`, badNews: true});
-        setTimeout( () => { setMsg({msg: null, badNews: false}) }, 5000);
+        setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
           // reload modified db
           dbServices
             .getAll()
@@ -133,13 +157,16 @@ const App = () => {
               setPersons(initialData)
               setShow(initialData)
             })
-            .catch(error => {
-              console.log('error on loading database!', error);
-          })
+            .catch(err => {
+              console.log('error', err.response);
+              // make notification
+              setMsg({msg: `error: ${err.response.data.error}!`, badNews: true});
+              setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
+            });
       });
       // make notification
       setMsg({msg: `removed details of ${event.target.name}!`, badNews: false});
-      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 2000);
+      setTimeout( () => { setMsg({msg: null, badNews: false}) }, 30000);
     }
   }
 
