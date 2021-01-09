@@ -15,6 +15,29 @@ beforeEach(async () => {
   const promiseArray = noteObjects.map(note => note.save());
   await Promise.all(promiseArray);
 });
+
+test('test that http post works', async () => {
+  const newBlog = { id: '9393', author: 'SuperGuy', title: 'theBlog',
+    url: 'ijffjijdfi', likes: 22 };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog);
+  const response = await api.get('/api/blogs');
+  expect(response.body).toHaveLength(7);
+});
+
+test.only('check that if likes not defined, it is set to 0', async () => {
+  const newBlog = { id: '9393', author: 'SuperGuy', title: 'theBlog',
+    url: 'ijffjijdfi' };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog);
+  const response = await api.get('/api/blogs/id/9393');
+  console.log('contex: ', response.body);
+  expect(response.body).toBeDefined();
+});
 // test.only if want to test only one
 test('notes are returned as json', async () => {
   await api
@@ -37,6 +60,14 @@ test('a specific note is within the returned notes', async () => {
   expect(contents).toContain(
     'Go To Statement Considered Harmful'
   );
+});
+
+test('test that id is id, not _id', async() => {
+  const response = await api.get('/api/blogs');
+
+  const contents = response.body.map(r => r.id);
+
+  expect(contents).toBeDefined();
 });
 
 //console.log('tV ', testVariables);
@@ -91,5 +122,6 @@ describe('most likes', () => {
 });
 
 afterAll(() => {
+  console.log('closing connection');
   mongoose.connection.close();
 });
