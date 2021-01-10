@@ -17,7 +17,7 @@ beforeEach(async () => {
 });
 
 test('test that http post works', async () => {
-  const newBlog = { id: '9393', author: 'SuperGuy', title: 'theBlog',
+  const newBlog = { author: 'SuperGuy', title: 'theBlog',
     url: 'ijffjijdfi', likes: 22 };
 
   await api
@@ -27,18 +27,26 @@ test('test that http post works', async () => {
   expect(response.body).toHaveLength(7);
 });
 
-test.only('check that if likes not defined, it is set to 0', async () => {
-  const newBlog = { id: '9393', author: 'SuperGuy', title: 'theBlog',
-    url: 'ijffjijdfi' };
+test('test that url and title are required', async () => {
+  const newBlog = { author: 'SuperGuy', likes: 22 };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400);
+});
+
+test('check that if likes not defined, it is set to 0', async () => {
+  const newBlog = { author: 'SuperGuy', title: 'theBlog', url: 'ijffjijdfi' };
 
   await api
     .post('/api/blogs')
     .send(newBlog);
-  const response = await api.get('/api/blogs/id/9393');
-  console.log('contex: ', response.body);
-  expect(response.body).toBeDefined();
+  const response = await api.get('/api/blogs/');
+  const content = response.body.filter( r => r.author === 'SuperGuy');
+  expect(content[0].likes).toBe(0);
 });
-// test.only if want to test only one
+
 test('notes are returned as json', async () => {
   await api
     .get('/api/blogs')
@@ -70,8 +78,6 @@ test('test that id is id, not _id', async() => {
   expect(contents).toBeDefined();
 });
 
-//console.log('tV ', testVariables);
-//console.log('tv.ta ', testVariables.testArray);
 test('dummy returns one', () => {
   const blogs = [];
 
