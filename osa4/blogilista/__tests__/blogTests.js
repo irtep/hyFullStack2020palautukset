@@ -1,5 +1,7 @@
 const listHelper = require('../utils/list_helper');
 const testVariables = require('../utils/testVariables');
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
 // for supertest
 const mongoose = require('mongoose');
 const supertest = require('supertest');
@@ -8,9 +10,45 @@ const Blog = require('../models/blog');
 
 const api = supertest(app);
 
+// USER TESTS
+describe('when there is initially one user at db', () => {
+  beforeEach(async () => {
+    // For user tests
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash('sekret', 10);
+    const user = new User({ username: 'root',
+      name: 'root man', passwordHash });
+    await user.save();
+  });
+
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await listHelper.usersInDb();
+
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen',
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const usersAtEnd = await listHelper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
+
+    const usernames = usersAtEnd.map(u => u.username);
+    expect(usernames).toContain(newUser.username);
+  });
+
+  //test();
+});
+
+// BLOG TESTS
 beforeEach(async () => {
   await Blog.deleteMany({});
-
   const noteObjects = testVariables.map(note => new Blog(note));
   const promiseArray = noteObjects.map(note => note.save());
   await Promise.all(promiseArray);
