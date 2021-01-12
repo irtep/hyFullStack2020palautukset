@@ -21,9 +21,8 @@ describe('when there is initially one user at db', () => {
     await user.save();
   });
 
-  test('creation succeeds with a fresh username', async () => {
+  test.only('creation succeeds with a fresh username', async () => {
     const usersAtStart = await listHelper.usersInDb();
-
     const newUser = {
       username: 'mluukkai',
       name: 'Matti Luukkainen',
@@ -43,7 +42,35 @@ describe('when there is initially one user at db', () => {
     expect(usernames).toContain(newUser.username);
   });
 
-  //test();
+  test('test min chars and required fields filters', async () => {
+    const usersAtStart = await listHelper.usersInDb();
+    const userTests = [{
+      username: '32',
+      name: '21343421',
+      passwordHash: '234234' },
+    {
+      username: '23434',
+      name: '22',
+      passwordHash: '12231312' },{
+      username: '123123',
+      name: '123231',
+      passwordHash: '' },
+    {
+      username: '',
+      name: '123231',
+      passwordHash: '423342' },{
+      username: '123231',
+      name: '123123',
+      passwordHash: '' }
+    ];
+    userTests.forEach( async user => {
+      await api
+        .post('/api/users')
+        .send(user);
+    });
+    const usersAtEnd = await listHelper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
+  });
 });
 
 // BLOG TESTS
