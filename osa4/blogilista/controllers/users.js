@@ -26,11 +26,21 @@ usersRouter.post('/', async (req, res) => {
 
 // show all users
 usersRouter.get('/', async (req, res) => {
-  const user = await User.find({});
+  const user = await User
+    .find({}).populate('notes');
+
   if (user) {
     res.json(user);
   } else {
     res.status(404).end();
   }
 });
+/*
+usersRouter.get('/', async (request, response) => {
+  const users = await User
+    .find({}).populate('notes')
+
+  response.json(users.map(u => u.toJSON()))
+})
+*/
 module.exports = usersRouter;
