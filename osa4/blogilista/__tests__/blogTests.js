@@ -21,7 +21,7 @@ describe('when there is initially one user at db', () => {
     await user.save();
   });
 
-  test.only('creation succeeds with a fresh username', async () => {
+  test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await listHelper.usersInDb();
     const newUser = {
       username: 'mluukkai',
