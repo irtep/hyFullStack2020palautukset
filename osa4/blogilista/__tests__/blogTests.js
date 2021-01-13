@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
+const jwt = require('jsonwebtoken');
 
 const api = supertest(app);
 
@@ -42,7 +43,7 @@ describe('when there is initially one user at db', () => {
     expect(usernames).toContain(newUser.username);
   });
 
-  test('test min chars and required fields filters', async () => {
+  test('min chars and required fields filters', async () => {
     const usersAtStart = await listHelper.usersInDb();
     const userTests = [{
       username: '32',
@@ -81,31 +82,59 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-test('test that http post works', async () => {
+test('http post works', async () => {
+  const userForToken = {
+    username: 'root',
+    id: '5fff3a871201660a48297b4e',
+  };
+  const token = jwt.sign(userForToken, process.env.SECRET);
   const newBlog = { author: 'SuperGuy', title: 'theBlog',
-    url: 'ijffjijdfi', likes: 22 };
+    url: 'ijffjijdfi', likes: 22, userId: 'superxxxid' };
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog);
   const response = await api.get('/api/blogs');
   expect(response.body).toHaveLength(7);
 });
 
-test('test that url and title are required', async () => {
-  const newBlog = { author: 'SuperGuy', likes: 22 };
+test('cant post without token', async () => {
+  const newBlog = { author: 'SuperGuy', title: 'theBlog',
+    url: 'ijffjijdfi', likes: 22 };
 
   await api
     .post('/api/blogs')
     .send(newBlog)
-    .expect(400);
+    .expect(401);
 });
 
-test('check that if likes not defined, it is set to 0', async () => {
-  const newBlog = { author: 'SuperGuy', title: 'theBlog', url: 'ijffjijdfi' };
+test('url and title are required', async () => {
+  const userForToken = {
+    username: 'root',
+    id: '5fff3a871201660a48297b4e',
+  };
+  const token = jwt.sign(userForToken, process.env.SECRET);
+  const newBlog = { author: 'SuperGuy', likes: 22, userId: 'superxxxid' };
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
+    .send(newBlog)
+    .expect(400);
+});
+
+test('if likes not defined, it is set to 0', async () => {
+  const userForToken = {
+    username: 'root',
+    id: '5fff3a871201660a48297b4e',
+  };
+  const token = jwt.sign(userForToken, process.env.SECRET);
+  const newBlog = { author: 'SuperGuy', title: 'theBlog', url: 'ijffjijdfi', userId: 'superxxxid' };
+
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog);
   const response = await api.get('/api/blogs/');
   const content = response.body.filter( r => r.author === 'SuperGuy');
