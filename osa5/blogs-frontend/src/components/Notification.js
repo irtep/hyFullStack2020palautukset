@@ -1,6 +1,12 @@
 import React from 'react';
-const goodStyle = { color: "green" };
-const badStyle = { color: 'red' };
+const goodStyle = { color: "green",
+  textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+ };
+const badStyle = {
+  color: 'red',
+  textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+};
+
 
 // send object with msg string and badNews boolean
 const Notification = ({ message }) => {

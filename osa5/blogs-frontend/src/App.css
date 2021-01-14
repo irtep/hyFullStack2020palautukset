@@ -1,4 +1,15 @@
+* {
+  margin: 3px;
+}
 body {
   background: gray;
   color: white;
+}
+button {
+  background: black;
+  color: gray;
+  border-radius: 5px;
+}
+button:hover {
+  color: yellow;
 }

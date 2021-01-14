@@ -1,9 +1,18 @@
 import React from 'react';
+import Header  from './Header';
 
-const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }) => (
-  <>
-  <h2>Login</h2>
-  <form onSubmit={handleLogin}>
+const style = {
+  backgroundColor: "indigo",
+  color: "gray",
+  width: "300px",
+  padding: "2px 5px",
+  borderRadius: "5px"
+};
+
+const LoginForm = ({ submitAction, username, password, setUsername, setPassword }) => (
+  <div style= { style } >
+  <Header name= "login"/>
+  <form onSubmit={submitAction}>
     <div>
       username
         <input
@@ -24,7 +33,7 @@ const LoginForm = ({ handleLogin, username, password, setUsername, setPassword }
     </div>
     <button type="submit">login</button>
   </form>
-  </>
+  </div>
 )
 
 export default LoginForm;
