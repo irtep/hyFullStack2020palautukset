@@ -1,8 +1,9 @@
 import React from 'react';
+const yellowText = { color: "yellow"};
 
 const Blog = ({ blog }) => (
   <div>
-    {blog.title} {blog.author}
+    {blog.title} <span style= { yellowText }>{blog.author}</span>
   </div>
 )
 

@@ -1,9 +1,9 @@
 import axios from 'axios';
 const baseUrl = '/api/login';
 
-export const login = () => {
-  const request = axios.post(baseUrl);
-  return request.then(response => response.data)
+const login =  async (credentials) => {
+  const response = await axios.post(baseUrl, credentials);
+  return response.data;
 }
 
 /*
@@ -30,5 +30,7 @@ const erase = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, erase };
+
 */
+const loginTools = { login };
+export default loginTools;
