@@ -6,7 +6,8 @@ const style = {
   color: "gray",
   width: "300px",
   padding: "2px 5px",
-  borderRadius: "5px"
+  borderRadius: "5px",
+  border: "2px solid black"
 };
 
 const LoginForm = ({ submitAction, username, password, setUsername, setPassword }) => (

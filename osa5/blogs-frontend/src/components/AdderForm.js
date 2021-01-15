@@ -1,37 +1,46 @@
 import React from 'react';
 import Header  from './Header';
-// W I P     W I P
+
 const style = {
-  backgroundColor: "white",
-  color: "black",
+  backgroundColor: "crimson",
+  color: "silver",
   width: "300px",
   padding: "2px 5px",
-  borderRadius: "5px"
+  borderRadius: "5px",
+  border: "2px solid black"
 };
 
-const AdderForm = ({ onSubmit, username, password, setUsername, setPassword }) => (
+const AdderForm = ({ onSubmit, blogTitle, author, url, setBlogTitle, setAuthor, setUrl }) => (
   <div style= { style } >
-    <Header name= "create new"/>
+    <Header name= "create new blog"/>
     <form onSubmit={ onSubmit }>
       <div>
         title
           <input
           type="text"
-          value={blogTitle}
-          name="blogTitle"
-          onChange={({ target }) => setUsername(target.value)}
+          value={ blogTitle }
+          onChange={({ target }) => setBlogTitle(target.value)}
         />
       </div>
       <div>
-        password
+        author
           <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
+          type="text"
+          value={ author }
+          name="author"
+          onChange={({ target }) => setAuthor(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <div>
+        url
+          <input
+          type="text"
+          value={ url }
+          name="url"
+          onChange={({ target }) => setUrl(target.value)}
+        />
+      </div>
+      <button type="submit">send new blog</button>
     </form>
   </div>
 )
