@@ -11,15 +11,11 @@ import blogTools from './services/blogs';
 import './App.css';
 
 const App = () => {
-  //const [loginVisible, setLoginVisible] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [blogTitle, setBlogTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
 
   const blogFormRef = React.createRef();
 
@@ -62,39 +58,17 @@ const App = () => {
     }
   };
 
-  // log use out
+  // log user out
   const logOutUser = () => {
     window.localStorage.removeItem('userDetails');
     setUser(null);
     blogTools.setToken('');
   }
 
-  // add new blog
-  const addNewBlog = (event) => {
-    event.preventDefault();
-    blogFormRef.current.toggleVisibility();
-    const newBlog = {
-      title: blogTitle,
-      author: author,
-      url: url,
-      user: user.id
-    };
-    blogTools.create(newBlog).then( () => {
-      setBlogTitle('');
-      setAuthor('');
-      setUrl('');
-      const updatedBlogs = blogs.concat(newBlog);
-      setBlogs(updatedBlogs);
-    }).catch( err => {
-      setErrorMessage({msg: 'error creating blog, check all fields', badNews: true})
-      setTimeout(() => {
-        setErrorMessage({msg: null});
-      }, 5000);
-    });
-  };
-
   const showLoginForm = () => (
-    <Toggable buttonLabel= "login">
+    <Toggable
+      button1Label= "login"
+      button2label= "cancel">
       <LoginForm
       submitAction= {handleLogin}
       username= {username}
@@ -114,15 +88,17 @@ const App = () => {
       name= "Logout"/>
     </div><br/>
 
-    <Toggable buttonLabel= "create new" ref= {blogFormRef}>
+    <Toggable
+      button1Label= "create new"
+      button2label= "don't create"
+      ref= {blogFormRef}>
       <AdderForm
-        onSubmit= { addNewBlog }
-        blogTitle= { blogTitle }
-        author= { author }
-        url= { url }
-        setBlogTitle= { setBlogTitle }
-        setAuthor= { setAuthor }
-        setUrl = { setUrl } / >
+        blogFormRef= { blogFormRef}
+        user= { user }
+        blogTools= { blogTools }
+        blogs= { blogs }
+        setBlogs= { setBlogs }
+        setErrorMessage= { setErrorMessage } / >
       </Toggable>
     <div>
     {blogs.map(blog =>
@@ -144,9 +120,3 @@ const App = () => {
 }
 
 export default App;
-/*
-handleLogin, username, target, password, setUsername, setPassword
-window.localStorage.setItem('joo', 'jee')
-getItem('joo')
-removeItem('joo')
-*/
