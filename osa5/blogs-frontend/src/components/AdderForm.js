@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header  from './Header';
 
 const style = {
@@ -10,10 +10,37 @@ const style = {
   border: "2px solid black"
 };
 
-const AdderForm = ({ onSubmit, blogTitle, author, url, setBlogTitle, setAuthor, setUrl }) => (
+const AdderForm = ({ blogFormRef, user, blogTools, blogs, setBlogs, setErrorMessage }) => {
+  const [blogTitle, setBlogTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
+  // add new blog
+  const addNewBlog = (event) => {
+    event.preventDefault();
+    blogFormRef.current.toggleVisibility();
+    const newBlog = {
+      title: blogTitle,
+      author: author,
+      url: url,
+      user: user.id
+    };
+    blogTools.create(newBlog).then( () => {
+      setBlogTitle('');
+      setAuthor('');
+      setUrl('');
+      const updatedBlogs = blogs.concat(newBlog);
+      setBlogs(updatedBlogs);
+    }).catch( err => {
+      setErrorMessage({msg: 'error creating blog, check all fields', badNews: true})
+      setTimeout(() => {
+        setErrorMessage({msg: null});
+      }, 5000);
+    });
+  };
+  return(
   <div style= { style } >
     <Header name= "create new blog"/>
-    <form onSubmit={ onSubmit }>
+    <form onSubmit={ addNewBlog }>
       <div>
         title
           <input
@@ -43,6 +70,6 @@ const AdderForm = ({ onSubmit, blogTitle, author, url, setBlogTitle, setAuthor, 
       <button type="submit">send new blog</button>
     </form>
   </div>
-)
+)}
 
 export default AdderForm;
