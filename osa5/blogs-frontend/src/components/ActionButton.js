@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-const ActionButton = ({id, action, name, textColor, bgColor, hoverText, hoverBg}) => {
+const ActionButton = ({ id, action, name, textColor, bgColor, hoverText, hoverBg }) => {
   const [hovered, setHovered] = useState(false);
 
-  const hoverSwitch = () =>{
+  const hoverSwitch = () => {
     setHovered(!hovered);
   };
 
@@ -18,7 +18,7 @@ const ActionButton = ({id, action, name, textColor, bgColor, hoverText, hoverBg}
     style = {
       color: textColor,
       background: bgColor,
-      border: `2px solid ${textColor}`};
+      border: `2px solid ${textColor}` };
   }
 
   return(
