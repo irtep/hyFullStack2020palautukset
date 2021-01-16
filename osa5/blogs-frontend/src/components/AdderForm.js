@@ -10,10 +10,11 @@ const style = {
   border: "2px solid black"
 };
 
-const AdderForm = ({ blogFormRef, user, blogTools, blogs, setBlogs, setErrorMessage }) => {
+const AdderForm = ({blogFormRef, user, blogTools, blogs, setBlogs, setErrorMessage, sortBlogs}) => {
   const [blogTitle, setBlogTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
+
   // add new blog
   const addNewBlog = (event) => {
     event.preventDefault();
@@ -28,15 +29,22 @@ const AdderForm = ({ blogFormRef, user, blogTools, blogs, setBlogs, setErrorMess
       setBlogTitle('');
       setAuthor('');
       setUrl('');
-      const updatedBlogs = blogs.concat(newBlog);
-      setBlogs(updatedBlogs);
+      // update view to see updated blogs in ui
+      blogTools.getAll().then(blogs => {
+        setBlogs(sortBlogs(blogs));
+        setErrorMessage({msg: 'Successfully created a blog.', badNews: false})
+        setTimeout(() => {
+          setErrorMessage({msg: null});
+        }, 5000);
+      }).catch( err => console.log(err));
     }).catch( err => {
-      setErrorMessage({msg: 'error creating blog, check all fields', badNews: true})
+      setErrorMessage({msg: 'ERROR: no 1-2 char or empty fields.', badNews: true})
       setTimeout(() => {
         setErrorMessage({msg: null});
       }, 5000);
     });
   };
+
   return(
   <div style= { style } >
     <Header name= "create new blog"/>
