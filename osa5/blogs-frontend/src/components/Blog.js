@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from 'react';
 import ActionButton from './ActionButton';
 
-const yellowText = {color: "yellow"};
-const navyText = {color: "navy"};
+const yellowText = { color: 'yellow' };
+const navyText = { color: 'navy' };
 const showMore = {
-  background: "white",
-  color: "black",
-  border: "5px solid green"};
+  background: 'white',
+  color: 'black',
+  border: '5px solid green' };
 
-const Blog = ({blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user}) => {
+const Blog = ({ blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user, likeThis }) => {
   const [showBlog, setShow] = useState(true);
   const [usersBlock, setUsersBlock] = useState(false);
 
@@ -23,40 +23,49 @@ const Blog = ({blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user}) => 
     }
   }, [blog.user.id, user.id]);
 
+  // liking
+  const liking = () => {
+    likeThis({ blog });
+  };
+
+  // delete blog
+  const deleteBlog = () => {
+    if (window.confirm(`really delete blog: ${blog.title}`)) {
+      blogTools.erase(blog.id).then( () => {
+        setErrorMessage({ msg: `deleted: ${blog.title}`, badNews: false });
+        setTimeout(() => {
+          setErrorMessage({ msg: null });
+        }, 5000);
+        // update view to see updated blogs in ui
+        blogTools.getAll().then(blogs => {
+          setBlogs(sortBlogs(blogs));
+        }).catch( err => {
+          console.log(err);
+          setErrorMessage({ msg: 'error getting info from database', badNews: true });
+          setTimeout(() => {
+            setErrorMessage({ msg: null });
+          }, 5000);
+        });
+      })
+        .catch( err => {
+          console.log(err);
+          setErrorMessage({ msg: 'error in delete!', badNews: true });
+          setTimeout(() => {
+            setErrorMessage({ msg: null });
+          }, 5000);
+        });
+    }
+  };
+
   const removeButton = () => (
-      <ActionButton
+    <ActionButton
       name= 'DELETE'
       textColor= 'white'
       bgColor= "pink"
       hoverText= "gold"
-      hoverBg= "red"/>
+      hoverBg= "red"
+      action= {deleteBlog}/>
   );
-
-  const likeThis = () => {
-    const newValue = blog.likes + 1;
-    // update = (id, field, newValue)
-    blogTools.update(blog.id, 'likes', newValue).then( () => {
-      // update view to see updated blogs in ui
-      blogTools.getAll().then(blogs => {
-        setBlogs(sortBlogs(blogs));
-        setErrorMessage({msg: 'Like ok!.', badNews: false});
-        setTimeout(() => {
-          setErrorMessage({msg: null});
-        }, 5000);
-      }).catch( err => {
-        console.log(err);
-        setErrorMessage({msg: 'error getting info from database', badNews: true});
-        setTimeout(() => {
-          setErrorMessage({msg: null});
-        }, 5000);
-      });
-    }).catch( err => {
-      setErrorMessage({msg: 'error updating likes!.', badNews: true});
-      setTimeout(() => {
-        setErrorMessage({msg: null});
-      }, 5000);
-    });;
-  };
 
   const showBrief = () => (
     <div>
@@ -73,13 +82,13 @@ const Blog = ({blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user}) => 
       <p>author: <span style= {navyText}>{blog.author}</span></p>
       <p>url: <span style= {navyText}>{blog.url}</span></p>
       <p>likes: <span style= {navyText}>{blog.likes}</span>
-      <ActionButton
-      name= 'Like'
-      action= {likeThis}
-      textColor= 'white'
-      bgColor= "darkGreen"
-      hoverText= "navy"
-      hoverBg= "dodgerBlue"/></p>
+        <ActionButton
+          name= 'Like'
+          action= {liking}
+          textColor= 'white'
+          bgColor= "darkGreen"
+          hoverText= "navy"
+          hoverBg= "dodgerBlue"/></p>
       <p>added by: <span style= {navyText}>{blog.user.name}</span></p>
       <button onClick= {toggleShow}>hide</button>
       {usersBlock ? removeButton() : null}
@@ -87,12 +96,12 @@ const Blog = ({blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user}) => 
   );
 
   return(
-  <div>
-    { showBlog === true ?
-      showBrief() :
-      showLong() }
-  </div>
-  )
+    <div className= "blogNote">
+      { showBlog === true ?
+        showBrief() :
+        showLong() }
+    </div>
+  );
 };
 
 export default Blog;

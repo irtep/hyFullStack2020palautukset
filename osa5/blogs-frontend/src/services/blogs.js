@@ -25,12 +25,21 @@ const create = async newObject => {
 
 // update a certain field for certain blog
 const update = (id, field, newValue) => {
-  const data = {field: field, newValue: newValue};
+  const data = { field: field, newValue: newValue };
   const req = axios.put(`${baseUrl}/${id}`, data);
   return req.then(res => res.data);
 };
 
-const blogTools = { getAll, create, setToken, update };
+// delete blog by id
+const erase = (id) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+  const req = axios.delete(`${baseUrl}/${id}`, config);
+  return req.then(res => res.data);
+};
+
+const blogTools = { getAll, create, setToken, update, erase };
 export default blogTools;
 
 // puhelinluettelo softasta

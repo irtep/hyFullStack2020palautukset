@@ -5,7 +5,7 @@ import AdderForm from './components/AdderForm';
 import Notification from './components/Notification';
 import ActionButton from './components/ActionButton';
 import Header from './components/Header';
-import Toggable from './components/Toggable';
+import Togglable from './components/Togglable';
 import loginTools from './services/login';
 import blogTools from './services/blogs';
 import './App.css';
@@ -23,7 +23,7 @@ const App = () => {
   useEffect(() => {
     blogTools.getAll().then(blogs => {
       setBlogs(sortBlogs(blogs));
-    }).catch( err => console.log(err))
+    }).catch( err => console.log(err));
   }, []);
 
   // when app is loaded
@@ -51,7 +51,7 @@ const App = () => {
     try {
       const user = await loginTools.login({
         username, password,
-      })
+      });
       setUser(user);
       setUsername('');
       setPassword('');
@@ -60,9 +60,9 @@ const App = () => {
         'userDetails', JSON.stringify(user)
       );
     } catch (exception) {
-      setErrorMessage({msg: 'wrong credentials', badNews: true})
+      setErrorMessage({ msg: 'wrong credentials', badNews: true });
       setTimeout(() => {
-        setErrorMessage({msg: null});
+        setErrorMessage({ msg: null });
       }, 5000);
     }
   };
@@ -72,58 +72,84 @@ const App = () => {
     window.localStorage.removeItem('userDetails');
     setUser(null);
     blogTools.setToken('');
-  }
+  };
 
   const showLoginForm = () => (
-    <Toggable
-      button1Label= "login"
-      button2label= "cancel">
-      <LoginForm
+    <LoginForm
       submitAction= {handleLogin}
       username= {username}
       password= {password}
       setUsername = {setUsername}
       setPassword = {setPassword} />
-    </Toggable>
-  )
+  );
 
   const showBlogs = () => (
     <div>
-    <Header name= 'Blogs'/>
-    <div>{user.name} logged in
-    <ActionButton
-      id= "logoutButton"
-      action= { logOutUser }
-      name= "Logout"/>
-    </div><br/>
+      <Header name= 'Blogs'/>
+      <div>{user.name} logged in
+        <ActionButton
+          id= "logoutButton"
+          action= { logOutUser }
+          name= "Logout"/>
+      </div><br/>
 
-    <Toggable
-      button1Label= "create new"
-      button2label= "don't create"
-      ref= {blogFormRef}>
-      <AdderForm
-        blogFormRef= {blogFormRef}
-        user= {user}
-        blogTools= {blogTools}
-        blogs= {blogs}
-        setBlogs= {setBlogs}
-        setErrorMessage= {setErrorMessage}
-        sortBlogs= {sortBlogs}/ >
-      </Toggable>
-    <div>
-    {blogs.map(blog =>
-      <Blog
-        key={blog.id}
-        blog={blog}
-        blogTools= {blogTools}
-        setBlogs= {setBlogs}
-        setErrorMessage= {setErrorMessage}
-        sortBlogs= {sortBlogs}
-        user= {user}/>
-    )}
+      <Togglable
+        button1label= "create new"
+        button2label= "don't create"
+        ref= {blogFormRef}>
+        <AdderForm
+          blogFormRef= {blogFormRef}
+          user= {user}
+          blogTools= {blogTools}
+          blogs= {blogs}
+          setBlogs= {setBlogs}
+          setErrorMessage= {setErrorMessage}
+          sortBlogs= {sortBlogs}/ >
+      </Togglable>
+      <div>
+        {blogs.map(blog =>
+          <Blog
+            key={blog.id}
+            blog={blog}
+            blogTools= {blogTools}
+            setBlogs= {setBlogs}
+            setErrorMessage= {setErrorMessage}
+            sortBlogs= {sortBlogs}
+            user= {user}
+            likeThis = {likeThis}/>
+        )}
+      </div>
     </div>
-    </div>
-  )
+  );
+
+  // add like to a blog
+  const likeThis = (event) => {
+    const blog = event.blog;
+    const newValue = blog.likes + 1;
+
+    blogTools.update(blog.id, 'likes', newValue).then( () => {
+      // update view to see updated blogs in ui
+      blogTools.getAll().then(blogs => {
+        setBlogs(sortBlogs(blogs));
+        setErrorMessage({ msg: 'Like ok!.', badNews: false });
+        setTimeout(() => {
+          setErrorMessage({ msg: null });
+        }, 5000);
+      }).catch( err => {
+        console.log(err);
+        setErrorMessage({ msg: 'error getting info from database', badNews: true });
+        setTimeout(() => {
+          setErrorMessage({ msg: null });
+        }, 5000);
+      });
+    }).catch( err => {
+      console.log(err);
+      setErrorMessage({ msg: 'error updating likes!.', badNews: true });
+      setTimeout(() => {
+        setErrorMessage({ msg: null });
+      }, 5000);
+    });
+  };
 
   return (
     <div>
@@ -133,7 +159,7 @@ const App = () => {
         showBlogs()
       }
     </div>
-  )
-}
+  );
+};
 
 export default App;
