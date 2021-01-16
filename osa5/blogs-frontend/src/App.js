@@ -19,14 +19,14 @@ const App = () => {
 
   const blogFormRef = React.createRef();
 
-  // get blogs from db
+  // when this app is loaded
   useEffect(() => {
     blogTools.getAll().then(blogs => {
-      setBlogs( blogs );
+      setBlogs(sortBlogs(blogs));
     }).catch( err => console.log(err))
   }, []);
 
-  // log in if remembers login
+  // when app is loaded
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('userDetails');
     if (loggedUserJSON) {
@@ -35,6 +35,15 @@ const App = () => {
       blogTools.setToken(user.token);
     }
   }, []);
+
+  // sort blogs
+  const sortBlogs = (receivedBlogs) => {
+    const sorted = receivedBlogs.sort( (a, b) => {
+      return b.likes - a.likes;
+    });
+
+    return sorted;
+  };
 
   // login
   const handleLogin = async (event) => {
@@ -93,16 +102,24 @@ const App = () => {
       button2label= "don't create"
       ref= {blogFormRef}>
       <AdderForm
-        blogFormRef= { blogFormRef}
-        user= { user }
-        blogTools= { blogTools }
-        blogs= { blogs }
-        setBlogs= { setBlogs }
-        setErrorMessage= { setErrorMessage } / >
+        blogFormRef= {blogFormRef}
+        user= {user}
+        blogTools= {blogTools}
+        blogs= {blogs}
+        setBlogs= {setBlogs}
+        setErrorMessage= {setErrorMessage}
+        sortBlogs= {sortBlogs}/ >
       </Toggable>
     <div>
     {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
+      <Blog
+        key={blog.id}
+        blog={blog}
+        blogTools= {blogTools}
+        setBlogs= {setBlogs}
+        setErrorMessage= {setErrorMessage}
+        sortBlogs= {sortBlogs}
+        user= {user}/>
     )}
     </div>
     </div>

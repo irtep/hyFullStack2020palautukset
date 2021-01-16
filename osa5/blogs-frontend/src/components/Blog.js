@@ -1,27 +1,89 @@
-import React, { useState } from 'react';
-const yellowText = { color: "yellow"};
+import React, {useState, useEffect} from "react";
+import ActionButton from './ActionButton';
 
-const Blog = ({ blog }) => {
+const yellowText = {color: "yellow"};
+const navyText = {color: "navy"};
+const showMore = {
+  background: "white",
+  color: "black",
+  border: "5px solid green"};
+
+const Blog = ({blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user}) => {
   const [showBlog, setShow] = useState(true);
-  console.log('blog: ', showBlog);
+  const [usersBlock, setUsersBlock] = useState(false);
+
   const toggleShow = () => {
-    console.log('toggling');
     setShow(!showBlog);
   };
 
+  // when this component is loaded
+  useEffect(() => {
+    if (blog.user.id === user.id) {
+      setUsersBlock(true);
+    }
+  }, [blog.user.id, user.id]);
+
+  const removeButton = () => (
+      <ActionButton
+      name= 'DELETE'
+      textColor= 'white'
+      bgColor= "pink"
+      hoverText= "gold"
+      hoverBg= "red"/>
+  );
+
+  const likeThis = () => {
+    const newValue = blog.likes + 1;
+    // update = (id, field, newValue)
+    blogTools.update(blog.id, 'likes', newValue).then( () => {
+      // update view to see updated blogs in ui
+      blogTools.getAll().then(blogs => {
+        setBlogs(sortBlogs(blogs));
+        setErrorMessage({msg: 'Like ok!.', badNews: false});
+        setTimeout(() => {
+          setErrorMessage({msg: null});
+        }, 5000);
+      }).catch( err => {
+        console.log(err);
+        setErrorMessage({msg: 'error getting info from database', badNews: true});
+        setTimeout(() => {
+          setErrorMessage({msg: null});
+        }, 5000);
+      });
+    }).catch( err => {
+      setErrorMessage({msg: 'error updating likes!.', badNews: true});
+      setTimeout(() => {
+        setErrorMessage({msg: null});
+      }, 5000);
+    });;
+  };
+
   const showBrief = () => (
-    <div>{blog.title}
     <div>
-    <span style= { yellowText }>{blog.author}</span>
-    </div>
-    <div>
-    <button onClick= {toggleShow}>show</button>
-    </div>
+      {blog.title}
+      <span style= {yellowText}>{blog.author}</span>
+      <button onClick= {toggleShow}>show</button>
     </div>
   );
 
   const showLong = () => (
-    <>{blog.url} <span style= { yellowText }>{blog.author}</span></>
+    <div style= {showMore}>
+      <p>id: <span style= {navyText}>{blog.id}</span></p>
+      <p>title: <span style= {navyText}>{blog.title}</span></p>
+      <p>author: <span style= {navyText}>{blog.author}</span></p>
+      <p>url: <span style= {navyText}>{blog.url}</span></p>
+      <p>likes: <span style= {navyText}>{blog.likes}</span>
+      <ActionButton
+      name= 'Like'
+      action= {likeThis}
+      textColor= 'white'
+      bgColor= "darkGreen"
+      hoverText= "navy"
+      hoverBg= "dodgerBlue"/></p>
+      <p>added by: <span style= {navyText}>{blog.user.name}</span></p>
+      <button onClick= {toggleShow}>hide</button>
+      {usersBlock ? removeButton() : null}
+    </div>
   );
 
   return(
