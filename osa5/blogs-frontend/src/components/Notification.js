@@ -1,9 +1,9 @@
 import React from 'react';
-const goodStyle = { color: 'green',
+const goodStyle = { color: 'rgb(10, 200, 20)',
   textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
 };
 const badStyle = {
-  color: 'red',
+  color: 'rgb(255, 0, 0)',
   textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000'
 };
 

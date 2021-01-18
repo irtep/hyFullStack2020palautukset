@@ -77,7 +77,7 @@ const AdderForm = ({ blogFormRef, user, blogTools, setBlogs, setErrorMessage, so
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">send new blog</button>
+        <button id= "submitNew" type="submit">send new blog</button>
       </form>
     </div>
   );};
