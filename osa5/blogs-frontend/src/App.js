@@ -67,6 +67,34 @@ const App = () => {
     }
   };
 
+  // this creates like
+  const likeThis = (event) => {
+    const blog = event.blog;
+    const newValue = blog.likes + 1;
+
+    blogTools.update(blog.id, 'likes', newValue).then( () => {
+      // update view to see updated blogs in ui
+      blogTools.getAll().then(blogs => {
+        setBlogs(sortBlogs(blogs));
+        setErrorMessage({ msg: 'Like ok!.', badNews: false });
+        setTimeout(() => {
+          setErrorMessage({ msg: null });
+        }, 5000);
+      }).catch( err => {
+        console.log(err);
+        setErrorMessage({ msg: 'error getting info from database', badNews: true });
+        setTimeout(() => {
+          setErrorMessage({ msg: null });
+        }, 5000);
+      });
+    }).catch( err => {
+      console.log(err);
+      setErrorMessage({ msg: 'error updating likes!.', badNews: true });
+      setTimeout(() => {
+        setErrorMessage({ msg: null });
+      }, 5000);
+    });
+  };
   // log user out
   const logOutUser = () => {
     window.localStorage.removeItem('userDetails');
@@ -116,40 +144,11 @@ const App = () => {
             setErrorMessage= {setErrorMessage}
             sortBlogs= {sortBlogs}
             user= {user}
-            likeThis = {likeThis}/>
+            likeThis= {likeThis}/>
         )}
       </div>
     </div>
   );
-
-  // add like to a blog
-  const likeThis = (event) => {
-    const blog = event.blog;
-    const newValue = blog.likes + 1;
-
-    blogTools.update(blog.id, 'likes', newValue).then( () => {
-      // update view to see updated blogs in ui
-      blogTools.getAll().then(blogs => {
-        setBlogs(sortBlogs(blogs));
-        setErrorMessage({ msg: 'Like ok!.', badNews: false });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      }).catch( err => {
-        console.log(err);
-        setErrorMessage({ msg: 'error getting info from database', badNews: true });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      });
-    }).catch( err => {
-      console.log(err);
-      setErrorMessage({ msg: 'error updating likes!.', badNews: true });
-      setTimeout(() => {
-        setErrorMessage({ msg: null });
-      }, 5000);
-    });
-  };
 
   return (
     <div>

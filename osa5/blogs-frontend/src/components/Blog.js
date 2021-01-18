@@ -23,7 +23,7 @@ const Blog = ({ blog, blogTools, setBlogs, setErrorMessage, sortBlogs, user, lik
     }
   }, [blog.user.id, user.id]);
 
-  // liking
+  // when liking the blog
   const liking = () => {
     likeThis({ blog });
   };
