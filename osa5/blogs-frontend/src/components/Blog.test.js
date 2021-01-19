@@ -2,20 +2,10 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
-//import Togglable from './Togglable';
-//import AdderForm from './AdderForm';
+import Togglable from './Togglable';
+import AdderForm from './AdderForm';
 import { testBlog, testUser } from '../forTests/variables';
-/*
-export const testBlog = {
-  title: 'The blog blog',
-  author: 'Mr tester',
-  url: 'this is url',
-  user: 'dkpofskpdfsa',
-  id: 'dkdfsjkfjdksf',
-  likes: 0
-};
-expect.not.stringContaining(string)
-*/
+
 describe('<Blog>', () => {
   let testComponent;
   const mockHandler = jest.fn();
@@ -54,7 +44,7 @@ describe('<Blog>', () => {
     expect(mockHandler).toHaveBeenCalledTimes(2);
   });
 });
-/*
+
 describe('<Togglable />', () => {
   let component;
 
@@ -88,23 +78,3 @@ describe('<Togglable />', () => {
     expect(div).not.toHaveStyle('display: none');
   });
 });
-/*
-test.only('<AdderForm /> updates parent state and calls onSubmit', () => {
-  const createNote = jest.fn();
-
-  const component = render(
-    <AdderForm addNewBlog={createNote} />
-  );
-
-  const input = component.container.querySelector('#inputTitle');
-  const form = component.container.querySelector('form');
-
-  fireEvent.change(input, {
-    target: { value: 'testing of forms could be easier' }
-  });
-  fireEvent.submit(form);
-
-  expect(createNote.mock.calls).toHaveLength(1);
-  expect(createNote.mock.calls[0][0].content).toBe('testing of forms could be easier' );
-});
-*/

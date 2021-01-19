@@ -49,7 +49,7 @@ const AdderForm = ({ blogFormRef, user, blogTools, setBlogs, setErrorMessage, so
   return(
     <div style= { style } >
       <Header name= "create new blog"/>
-      <form onSubmit={ addNewBlog }>
+      <form id= "addBlogForm" onSubmit={ addNewBlog }>
         <div>
         title
           <input
@@ -64,7 +64,7 @@ const AdderForm = ({ blogFormRef, user, blogTools, setBlogs, setErrorMessage, so
           <input
             type="text"
             value={ author }
-            name="author"
+            id="author"
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -73,11 +73,11 @@ const AdderForm = ({ blogFormRef, user, blogTools, setBlogs, setErrorMessage, so
           <input
             type="text"
             value={ url }
-            name="url"
+            id="url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type="submit">send new blog</button>
+        <button id= "submitNew" type="submit">send new blog</button>
       </form>
     </div>
   );};

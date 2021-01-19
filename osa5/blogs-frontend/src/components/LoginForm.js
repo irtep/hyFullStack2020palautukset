@@ -14,7 +14,7 @@ const style = {
 const LoginForm = ({ submitAction, username, setUsername, password, setPassword }) => {
 
   return (
-    <div style= { style } >
+    <div id= "loginFormX" style= { style } >
       <Header name= "login"/>
       <form onSubmit={submitAction}>
         <div>
@@ -22,7 +22,7 @@ const LoginForm = ({ submitAction, username, setUsername, password, setPassword 
           <input
             type="text"
             value={username}
-            name="Username"
+            id="username"
             onChange={({ target }) => setUsername(target.value)}
           />
         </div>
@@ -31,11 +31,11 @@ const LoginForm = ({ submitAction, username, setUsername, password, setPassword 
           <input
             type="password"
             value={password}
-            name="Password"
+            id="password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button id= "loginButton" type="submit">login</button>
       </form>
     </div>);
 };
