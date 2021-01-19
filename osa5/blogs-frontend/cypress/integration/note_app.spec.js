@@ -8,6 +8,24 @@ const user2 = {
   username: 'jamesK',
   password: 'kuikka'
 };
+const blog1 = {
+  url: 'onelike.fi',
+  author: 'james',
+  title: 'this should have one like',
+  likes: 1
+};
+const blog2 = {
+  url: 'threelikes.fi',
+  author: 'james',
+  title: 'this should have three likes',
+  likes: 3
+};
+const blog3 = {
+  url: 'twolike.fi',
+  author: 'james',
+  title: 'this should have two likes',
+  likes: 2
+};
 
 describe('Blog app', function() {
   beforeEach(function() {
@@ -98,29 +116,15 @@ describe('Blog app', function() {
       cy.get('DELETE').should('not.exist');
     });
 
-    it('blogs are sorted by most likes'), function() { // continue from this
-      cy.contains('create new').click();
-      cy.get('#inputTitle').type('like this blog');
-      cy.get('#author').type('mr liker');
-      cy.get('#url').type('yeagh');
-      cy.contains('send new blog').click();
-      cy.contains('show').click();
-      cy.contains('Like').click();
-      cy.contains('hide').click();
-      cy.contains('create new').click();
-      cy.get('#inputTitle').type('like this blog');
-      cy.get('#author').type('mr liker');
-      cy.get('#url').type('yeagh');
-      cy.contains('send new blog').click();
-      cy.contains('show').click();
-      cy.contains('Like').click();
-      cy.contains('create new').click();
-      cy.get('#inputTitle').type('like this blog');
-      cy.get('#author').type('mr liker');
-      cy.get('#url').type('yeagh');
-      cy.contains('send new blog').click();
-      cy.contains('show').click();
-      cy.contains('Like').click();
-    };
+    it('blogs are sorted by most likes', function() { // continue from this
+      cy.createBlog(blog1); // 1 likes
+      cy.createBlog(blog2); // 3 likes
+      cy.createBlog(blog3); // 2 likes
+      cy.get('.blogNote').then( (blogNotes) => {
+        cy.wrap(blogNotes[0]).should('contain', 'three likes');
+        cy.wrap(blogNotes[1]).should('contain', 'two likes');
+        cy.wrap(blogNotes[2]).should('contain', 'one like');
+      });
+    });
   });
 });

@@ -23,3 +23,26 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+/*
+// create
+const create = async newObject => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const res = await axios.post(baseUrl, newObject, config);
+  return res.data;
+};
+*/
+Cypress.Commands.add('createBlog', ({ url, author, title, likes }) => {
+  //console.log('content ', content);
+  cy.request({
+    url: 'http://localhost:3001/api/blogs',
+    method: 'POST',
+    body: { url, author, title, likes },
+    headers: {
+      'Authorization': `bearer ${JSON.parse(localStorage.getItem('userDetails')).token}`
+    }
+  });
+  cy.visit('http://localhost:3000');
+});
