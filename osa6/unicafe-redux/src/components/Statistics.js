@@ -1,18 +1,14 @@
 import React from 'react'
-import { giveWeightedAverage } from './functions.js'
+import StatisticsLine from './StatisticsLine'
 
-const StatisticsLine = ({text, value}) => {
-  return(
-    <>
-    <td>
-      {text}
-    </td>
-    <td>
-      {value}
-    </td>
-    </>
-  );
-}
+const giveWeightedAverage = (weights, all) => {
+    const reducedArray = weights.reduce((acc, item) => {
+      return acc + item.nro * item.weight;
+    }, 0);
+    let result = reducedArray / all;
+    if (isNaN(result)) return ' - No given feedbacks';
+    return result;
+};
 
 export const Statistics = ({goods, neutrals, bads}) => {
   const all = goods + neutrals + bads;
@@ -44,7 +40,7 @@ export const Statistics = ({goods, neutrals, bads}) => {
               <StatisticsLine text= "Good feedbacks: " value= {goods} />
             </tr>
             <tr>
-              <StatisticsLine text= "Neutral feedbacks: " value= {neutrals} />
+              <StatisticsLine text= "Ok feedbacks: " value= {neutrals} />
             </tr>
             <tr>
               <StatisticsLine text= "Bad feedbacks: " value= {bads} />
@@ -80,30 +76,4 @@ export const Statistics = ({goods, neutrals, bads}) => {
   }
 }
 
-export const Button = ({name, ifClicked}) => {
-  const goodStyle= {backgroundColor: "green"};
-  const neutralStyle= {backgroundColor: "white"};
-  const badStyle= {backgroundColor: "red"};
-  let chooseStyle = null;
-
-  switch (name) {
-    case 'good':
-      chooseStyle = goodStyle;
-    break;
-    case 'neutral':
-      chooseStyle = neutralStyle;
-    break;
-    case 'bad':
-      chooseStyle = badStyle;
-    break;
-    default: chooseStyle = goodStyle;
-  }
-
-  return(
-    <>
-      <button onClick= {ifClicked} style= {chooseStyle}>
-        {name}
-      </button>
-    </>
-  );
-}
+export default Statistics
