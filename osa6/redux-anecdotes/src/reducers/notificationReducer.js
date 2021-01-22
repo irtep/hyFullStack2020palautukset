@@ -15,7 +15,7 @@ export const clearNotification = (content) => {
 const notiReducer = (state = 'welcome!', action) => {
   switch (action.type) {
     case 'NOTIFICATION':
-      return `vote added for ${action.data}`
+      return action.data
     case 'CLEAR':
       return ''
     default:

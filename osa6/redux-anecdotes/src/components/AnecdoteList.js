@@ -22,12 +22,19 @@ const Anecdote = ({ane}) => {
 }
 
 const AnecdoteList = () => {
+  const filter = useSelector(state => state.filters)
   const anecList = useSelector(state => state.anecdotes)
   const sorted = anecList.sort( (a, b ) => b.votes - a.votes)
+  let showing = sorted
+  if (filter !== '') {
+    showing = anecList.filter( entry => entry.content.toLowerCase().includes(filter));
+  } else {
+    showing = sorted
+  }
 
   return(
   <div>
-    {sorted.map(ane =>
+    {showing.map(ane =>
       <Anecdote
         key={ane.id}
         ane={ane}
