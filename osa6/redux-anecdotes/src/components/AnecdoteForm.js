@@ -2,24 +2,26 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { createNew } from '../reducers/anecdoteReducer'
 import { addNotification, clearNotification } from '../reducers/notificationReducer'
+//import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
-  const preventDefault = (e) => e.preventDefault()
+
+  const addNew = async (e) => {
+    e.preventDefault()
+    const newAneStr = e.target.newAnec.value
+    dispatch(createNew(newAneStr))
+    dispatch(addNotification(`created ${newAneStr}, refresh browser to see it`))
+    window.setTimeout( () => {
+      dispatch(clearNotification())
+    }, 5000)
+  }
 
   return(
     <div>
-      <form onSubmit = {preventDefault}>
-        <input type= "text" id= "newAne" />
-        <button type= "submit" onClick= {
-          e => {
-            dispatch(createNew(document.getElementById('newAne').value))
-            dispatch(addNotification(`created ${document.getElementById('newAne').value}`))
-            window.setTimeout( () => {
-              dispatch(clearNotification())
-            }, 5000)
-          }
-        }>send new</button>
+      <form onSubmit = {addNew}>
+        <input type= "text" id= "newAne" name= "newAnec"/>
+        <button type= "submit">send new</button>
       </form>
     </div>
   )

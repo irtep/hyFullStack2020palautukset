@@ -11,7 +11,7 @@ const Anecdote = ({ane}) => {
       {ane.content}<br/>
       votes: {ane.votes}
       <button onClick= {e => {
-        dispatch(voteThis(ane.id))
+        dispatch(voteThis(ane.id, ane.votes))
         dispatch(addNotification(`voted for: ${ane.id}`))
         window.setTimeout( () => {
           dispatch(clearNotification())
@@ -26,6 +26,7 @@ const AnecdoteList = () => {
   const anecList = useSelector(state => state.anecdotes)
   const sorted = anecList.sort( (a, b ) => b.votes - a.votes)
   let showing = sorted
+
   if (filter !== '') {
     showing = anecList.filter( entry => entry.content.toLowerCase().includes(filter));
   } else {
