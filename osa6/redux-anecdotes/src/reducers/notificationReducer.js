@@ -1,11 +1,26 @@
 
-export const addNotification = (content) => {
-  return {
-    type: 'NOTIFICATION',
-    data: (content)
+var timeouts = [];
+
+export const addNotification = (content, timer) => {
+  for (let i = 0; i < timeouts.length; i++) {
+    clearTimeout(timeouts[i]);
+  }
+  return async dispatch => {
+    await dispatch(showNotification(content))
+    timeouts.push(window.setTimeout( () => {
+      dispatch(clearNotification())
+    }, timer * 1000))
   }
 }
-export const clearNotification = (content) => {
+
+const showNotification = (content) => {
+  return {
+    type: 'NOTIFICATION',
+    data: content
+  }
+}
+
+const clearNotification = () => {
   return {
     type: 'CLEAR',
     data: ''
