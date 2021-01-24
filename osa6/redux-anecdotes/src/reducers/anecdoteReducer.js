@@ -1,38 +1,12 @@
 import anecdoteServices from '../services/anecdotes'
 
-/*
-id, field, newValue
-blogTools.update(blog.id, 'likes', newValue).then( () => {
-      // update view to see updated blogs in ui
-      blogTools.getAll().then(blogs => {
-        setBlogs(sortBlogs(blogs));
-        setErrorMessage({ msg: 'Like ok!.', badNews: false });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      }).catch( err => {
-        console.log(err);
-        setErrorMessage({ msg: 'error getting info from database', badNews: true });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-*/
 // action creators
-export const voteThis = (id, votes) => {
+export const voteThis = (id, content, votes) => {
   return async dispatch => {
-    console.log('voting: ', id, votes);
-    await anecdoteServices.update(id, 'votes', votes + 1)
-    const notes = await anecdoteServices.getAll()
-    /*
-    const newVoteFor = notes.find(a => a.id === id)
-    const changedAnec = {
-      ...newVoteFor,
-    votes: newVoteFor.votes + 1}
-    const updated = notes.map(ane => ane.id !== id ? ane : changedAnec)
-    */
+    await anecdoteServices.update(id, content, votes + 1)
     dispatch({
       type: 'VOTE',
-      data: notes
+      data: id
     })
   }
 }
@@ -65,17 +39,12 @@ export const initializeNotes = () => {
 const aneReducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE':
-      const updated = action.data.filter( ane => !state.some( anec => ane.content === anec.content))
-      console.log('updated ', updated);
-    /*
-    const newVoteFor = notes.find(a => a.id === id)
-    const changedAnec = {
-      ...newVoteFor,
-    votes: newVoteFor.votes + 1}
-    const updated = notes.map(ane => ane.id !== id ? ane : changedAnec)
-    */
-      //const newUpdates = action.data.filter( ane => !state.some( anec => ane.content === anec.content))
-      return state
+      const newVoteFor = state.find(a => a.id === action.data)
+      const changedAnec = {
+        ...newVoteFor,
+        votes: newVoteFor.votes + 1
+      }
+      return state.map(ane => ane.id !== action.data ? ane : changedAnec)
     case 'CREATE':
       const newData = action.data.filter( ane => !state.some( anec => ane.content === anec.content))
       return state.concat(newData)
