@@ -1,0 +1,43 @@
+{
+  "notes": [
+    {
+      "content": "custom-hookit aivan mahtavia",
+      "id": 1
+    },
+    {
+      "content": "paras feature ikinä <3",
+      "id": 2
+    },
+    {
+      "content": "the new feature",
+      "id": 3
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "the new person",
+      "number": "033030",
+      "id": 2
+    },
+    {
+      "name": "james",
+      "number": "30393",
+      "id": 3
+    },
+    {
+      "name": "charles mcgill",
+      "number": "9393",
+      "id": 4
+    },
+    {
+      "name": "james mcgill",
+      "number": "9393f",
+      "id": 5
+    }
+  ]
+}
