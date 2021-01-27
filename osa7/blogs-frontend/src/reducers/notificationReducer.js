@@ -29,7 +29,7 @@ const clearNotification = () => {
 const notiReducer = (state = { msg: null, badNews: false }, action) => {
   switch (action.type) {
   case 'NOTIFICATION':
-    return action.data.msg;
+    return action.data;
   case 'CLEAR':
     return '';
   default:

@@ -1,32 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import Blog from './components/Blog';
+import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
 import AdderForm from './components/AdderForm';
 import Notification from './components/Notification';
 import ActionButton from './components/ActionButton';
 import Header from './components/Header';
 import Togglable from './components/Togglable';
-import loginTools from './services/login';
 import blogTools from './services/blogs';
+import loginTools from './services/login';
+import { addNotification } from './reducers/notificationReducer';
+import { setBlogs } from './reducers/blogReducer';
+import { useDispatch } from 'react-redux';
 import './App.css';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [errorMessage, setErrorMessage] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const blogFormRef = React.createRef();
 
-  // when this app is loaded
-  useEffect(() => {
-    blogTools.getAll().then(blogs => {
-      setBlogs(sortBlogs(blogs));
-    }).catch( err => console.log(err));
-  }, []);
-
   // when app is loaded
+  useEffect(() => {
+    dispatch(setBlogs());
+  }, []);
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('userDetails');
     if (loggedUserJSON) {
@@ -35,15 +33,6 @@ const App = () => {
       blogTools.setToken(user.token);
     }
   }, []);
-
-  // sort blogs
-  const sortBlogs = (receivedBlogs) => {
-    const sorted = receivedBlogs.sort( (a, b) => {
-      return b.likes - a.likes;
-    });
-
-    return sorted;
-  };
 
   // login
   const handleLogin = async (event) => {
@@ -60,41 +49,10 @@ const App = () => {
         'userDetails', JSON.stringify(user)
       );
     } catch (exception) {
-      setErrorMessage({ msg: 'wrong credentials', badNews: true });
-      setTimeout(() => {
-        setErrorMessage({ msg: null });
-      }, 5000);
+      dispatch(addNotification({ msg: 'wrong credentials', badNews: true }, 5));
     }
   };
 
-  // this creates like
-  const likeThis = (event) => {
-    const blog = event.blog;
-    const newValue = blog.likes + 1;
-
-    blogTools.update(blog.id, 'likes', newValue).then( () => {
-      // update view to see updated blogs in ui
-      blogTools.getAll().then(blogs => {
-        setBlogs(sortBlogs(blogs));
-        setErrorMessage({ msg: 'Like ok!.', badNews: false });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      }).catch( err => {
-        console.log(err);
-        setErrorMessage({ msg: 'error getting info from database', badNews: true });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      });
-    }).catch( err => {
-      console.log(err);
-      setErrorMessage({ msg: 'error updating likes!.', badNews: true });
-      setTimeout(() => {
-        setErrorMessage({ msg: null });
-      }, 5000);
-    });
-  };
   // log user out
   const logOutUser = () => {
     window.localStorage.removeItem('userDetails');
@@ -125,34 +83,17 @@ const App = () => {
         button1label= "create new"
         button2label= "don't create"
         ref= {blogFormRef}>
-        <AdderForm
-          blogFormRef= {blogFormRef}
-          user= {user}
-          blogTools= {blogTools}
-          blogs= {blogs}
-          setBlogs= {setBlogs}
-          setErrorMessage= {setErrorMessage}
-          sortBlogs= {sortBlogs}/ >
+        <AdderForm/ >
       </Togglable>
       <div>
-        {blogs.map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            blogTools= {blogTools}
-            setBlogs= {setBlogs}
-            setErrorMessage= {setErrorMessage}
-            sortBlogs= {sortBlogs}
-            user= {user}
-            likeThis= {likeThis}/>
-        )}
+        <Blogs user= {user} />
       </div>
     </div>
   );
 
   return (
     <div>
-      <Notification message={errorMessage} />
+      <Notification />
       {user === null?
         showLoginForm() :
         showBlogs()
