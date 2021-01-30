@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState } from 'react';
 import ActionButton from './ActionButton';
 import { useDispatch,  useSelector } from 'react-redux';
 //import { addNotification } from '../reducers/notificationReducer';
@@ -11,25 +11,16 @@ const showMore = {
   color: 'black',
   border: '5px solid green' };
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
+  const user = useSelector( state => state.users);
   const dispatch = useDispatch();
   const [showBlog, setShow] = useState(true);
-  const [usersBlock, setUsersBlock] = useState(false);
   const toggleShow = () => {
     setShow(!showBlog);
   };
-  //  setUsersBlock(false);
-
-  // when this component is loaded
-  useEffect(() => {
-    if (blog.user.id === user.id) {
-      setUsersBlock(true);
-    }
-  }, [blog.user.id, user.id]);
 
   // when liking the blog
   const liking = () => {
-    console.log('dispachin like', blog);
     dispatch(likeThis({ blog }));
   };
 
@@ -74,7 +65,7 @@ const Blog = ({ blog, user }) => {
           hoverBg= "dodgerBlue"/></p>
       <p>added by: <span style= {navyText}>{blog.user.name}</span></p>
       <button onClick= {toggleShow}>hide</button>
-      {usersBlock ? removeButton() : null}
+      {blog.user.id === user.id ? removeButton() : null}
     </div>
   );
 
@@ -87,15 +78,14 @@ const Blog = ({ blog, user }) => {
   );
 };
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
   const allBlogs = useSelector(state => state.blogs);
   return (
     <div>
       {allBlogs.map(blog =>
         <Blog
           key={blog.id}
-          blog= {blog}
-          user= {user} />
+          blog= {blog} />
       )}
     </div>
   );

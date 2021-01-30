@@ -1,6 +1,9 @@
 import React from 'react';
 import Header  from './Header';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
+import { useField } from '../hooks';
+import { login } from '../reducers/usersReducer';
+import { useDispatch } from 'react-redux';
 
 const style = {
   backgroundColor: 'indigo',
@@ -11,7 +14,17 @@ const style = {
   border: '2px solid black'
 };
 
-const LoginForm = ({ submitAction, username, setUsername, password, setPassword }) => {
+const LoginForm = () => {
+  const dispatch = useDispatch();
+  const username = useField('text');
+  const password = useField('text');
+
+  const submitAction = (e) => {
+    e.preventDefault();
+    console.log('e ', username.value);
+    console.log('submitting');
+    dispatch(login(username.value, password.value));
+  };
 
   return (
     <div id= "loginFormX" style= { style } >
@@ -19,33 +32,22 @@ const LoginForm = ({ submitAction, username, setUsername, password, setPassword 
       <form onSubmit={submitAction}>
         <div>
         username
-          <input
-            type="text"
-            value={username}
-            id="username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+          <input {...username} />
         </div>
         <div>
         password
-          <input
-            type="password"
-            value={password}
-            id="password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <input{...password} />
         </div>
         <button id= "loginButton" type="submit">login</button>
       </form>
-    </div>);
+    </div>
+  );
 };
-
+/*
 LoginForm.propTypes = {
   submitAction: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
-  setPassword: PropTypes.func.isRequired,
   username: PropTypes.string.isRequired,
   password: PropTypes.string.isRequired
 };
-
+*/
 export default LoginForm;
