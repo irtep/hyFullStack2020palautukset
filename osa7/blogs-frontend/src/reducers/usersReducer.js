@@ -8,7 +8,6 @@ export const login = (username, password) => {
       const user = await loginTools.login({
         username, password,
       });
-      console.log('login ok! ', user);
 
       blogTools.setToken(user.token);
       window.localStorage.setItem(
