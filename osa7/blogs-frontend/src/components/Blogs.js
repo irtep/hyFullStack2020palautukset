@@ -18,7 +18,6 @@ const Blog = ({ blog }) => {
   const toggleShow = () => {
     setShow(!showBlog);
   };
-
   // when liking the blog
   const liking = () => {
     dispatch(likeThis({ blog }));
