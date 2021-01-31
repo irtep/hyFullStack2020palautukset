@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ActionButton from './ActionButton';
 import { useDispatch,  useSelector } from 'react-redux';
-//import { addNotification } from '../reducers/notificationReducer';
 import { likeThis, deleteThis } from '../reducers/blogReducer';
 
 const yellowText = { color: 'yellow' };
@@ -18,12 +17,11 @@ const Blog = ({ blog }) => {
   const toggleShow = () => {
     setShow(!showBlog);
   };
-  // when liking the blog
+
   const liking = () => {
     dispatch(likeThis({ blog }));
   };
 
-  // delete blog
   const deleteBlog = () => {
     if (window.confirm(`really delete blog: ${blog.title}`)) {
       dispatch(deleteThis({ blog }));
