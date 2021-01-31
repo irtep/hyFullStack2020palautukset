@@ -87,7 +87,7 @@ describe('Blog app', function() {
       cy.contains('send new blog').click();
       cy.contains('show').click();
       cy.contains('Like').click();
-      cy.contains('Like ok!');
+      cy.contains('liked');
     });
 
     it('A blog can be deleted', function() {
@@ -98,7 +98,7 @@ describe('Blog app', function() {
       cy.contains('send new blog').click();
       cy.contains('show').click();
       cy.contains('DELETE').click();
-      cy.contains('deleted:');
+      cy.contains('deleted blog');
     });
 
     it('Can not delete if not adder of blog', function() {

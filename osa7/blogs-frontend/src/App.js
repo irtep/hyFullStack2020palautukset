@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm';
 import AdderForm from './components/AdderForm';
 import Notification from './components/Notification';
 import ActionButton from './components/ActionButton';
+import UsersList from './components/UsersList';
 import Header from './components/Header';
 import Togglable from './components/Togglable';
 import blogTools from './services/blogs';
@@ -30,7 +31,6 @@ const App = () => {
     }
   }, []);
 
-  // log user out
   const logOutUser = () => {
     dispatch(logout());
   };
@@ -49,7 +49,6 @@ const App = () => {
             action= { logOutUser }
             name= "Logout"/>
         </div><br/>
-
         <Togglable
           button1label= "create new"
           button2label= "don't create"
@@ -72,6 +71,8 @@ const App = () => {
         showLoginForm() :
         showBlogs()
       }
+      <Header name= "Users" />
+      <UsersList />
     </div>
   );
 };

@@ -31,27 +31,6 @@ const AdderForm = ({ blogFormRef }) => {
       user: user.id
     };
     dispatch(createNew(newBlog));
-    /*
-    blogTools.create(newBlog).then( () => {
-      setBlogTitle('');
-      setAuthor('');
-      setUrl('');
-      // update view to see updated blogs in ui
-      blogTools.getAll().then(blogs => {
-        setBlogs(sortBlogs(blogs));
-        setErrorMessage({ msg: 'Successfully created a blog.', badNews: false });
-        setTimeout(() => {
-          setErrorMessage({ msg: null });
-        }, 5000);
-      }).catch( err => console.log(err));
-    }).catch( err => {
-      console.log(err);
-      setErrorMessage({ msg: 'ERROR: no 1-2 char or empty fields.', badNews: true });
-      setTimeout(() => {
-        setErrorMessage({ msg: null });
-      }, 5000);
-    });
-    */
   };
 
   return(
