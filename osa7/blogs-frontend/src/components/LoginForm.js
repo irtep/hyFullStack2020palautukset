@@ -16,13 +16,11 @@ const style = {
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const username = useField('text');
-  const password = useField('text');
+  const username = useField('text', 'username');
+  const password = useField('text', 'password');
 
   const submitAction = (e) => {
     e.preventDefault();
-    console.log('e ', username.value);
-    console.log('submitting');
     dispatch(login(username.value, password.value));
   };
 
@@ -36,7 +34,7 @@ const LoginForm = () => {
         </div>
         <div>
         password
-          <input{...password} />
+          <input {...password} />
         </div>
         <button id= "loginButton" type="submit">login</button>
       </form>

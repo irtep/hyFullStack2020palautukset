@@ -3,13 +3,13 @@ import loginTools from '../services/login';
 import blogTools from '../services/blogs';
 
 export const login = (username, password) => {
-  console.log('got u: ', username);
-  console.log('got p ', password);
   return async dispatch => {
     try {
       const user = await loginTools.login({
         username, password,
       });
+      console.log('login ok! ', user);
+
       blogTools.setToken(user.token);
       window.localStorage.setItem(
         'userDetails', JSON.stringify(user)
@@ -49,7 +49,7 @@ const usersReducer = ( state = null, action) => {
   switch (action.type) {
   case 'USER':
     return { ...state,
-      notes: action.data.notes,
+      id: action.data.id,
       username: action.data.username,
       name: action.data.name,
       passwordHash: action.data.passwordHash

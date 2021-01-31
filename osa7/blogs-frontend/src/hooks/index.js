@@ -29,9 +29,9 @@ export const useResource = (baseUrl) => {
   ];
 };
 
-export const useField = (type) => {
+export const useField = (type, iId) => {
   const [value, setValue] = useState('');
-
+  const [id] = useState(iId);
   const onChange = (event) => {
     setValue(event.target.value);
   };
@@ -39,6 +39,7 @@ export const useField = (type) => {
   return {
     type,
     value,
-    onChange
+    onChange,
+    id
   };
 };

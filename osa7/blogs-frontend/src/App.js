@@ -16,7 +16,7 @@ const App = () => {
   const dispatch = useDispatch();
   const loggedUser = useSelector( state => state.users );
   const blogFormRef = React.createRef();
-  console.log('loggedUser ', loggedUser);
+
   // when app is loaded
   useEffect(() => {
     dispatch(setBlogs());
@@ -30,26 +30,6 @@ const App = () => {
     }
   }, []);
 
-  // login
-  /*
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const user = await loginTools.login({
-        username, password,
-      });
-      dispatch(setUser(user));
-      setUsername('');
-      setPassword('');
-      blogTools.setToken(user.token);
-      window.localStorage.setItem(
-        'userDetails', JSON.stringify(user)
-      );
-    } catch (exception) {
-      dispatch(addNotification({ msg: 'wrong credentials', badNews: true }, 5));
-    }
-  };
-*/
   // log user out
   const logOutUser = () => {
     dispatch(logout());

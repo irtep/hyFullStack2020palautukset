@@ -40,18 +40,37 @@ export const likeThis = (blog) => {
   };
 };
 
+export const createNew = (data) => {
+  return async dispatch => {
+    try {
+      await blogTools.create(data);
+      dispatch(addNotification({ msg: 'Successfully created a blog.', badNews: false }, 5));
+      dispatch({
+        type: 'CREATE'
+      });
+    }
+    catch(err) {
+      console.log(err);
+      dispatch(addNotification({ msg: 'ERROR: no 1-2 characters or empty fields.', badNews: true }, 5));
+    }
+
+  };
+};
+
 const blogReducer = ( state = [], action) => {
   switch (action.type) {
   case 'VOTE':
     return state.map(a => a.id === action.data.id ? action.data : a).sort( (ax, b) => {
       return b.likes - ax.likes;
     });
-  case 'CREATE':
-  //  const newData = action.data.filter( ane => !state.some( anec => ane.content === anec.content))
-  //  return state.concat(newData);
-    break;
+  case 'CREATE':/*
+    const newStuff = blogTools.getAll().then( blogs => {
+      return state.map( a => a.id === blogs.id);
+    });*/
+    return state;
   case 'INITIATE':
-    return state.concat(action.data);
+    return state.concat(action.data).sort( (ax, b) => {
+      return b.likes - ax.likes;});
   case 'DELETE':
     return state.filter(blog => blog.id !== action.data.id);
   default: return state;
