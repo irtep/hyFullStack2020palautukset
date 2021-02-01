@@ -23,6 +23,7 @@ const UsersList = () => {
     userTools.getAll().then(allUsers => {
       setUsers(allUsers);
     }).catch( err => console.log(err));
+    return () => {};
   }, []);
 
   return (
