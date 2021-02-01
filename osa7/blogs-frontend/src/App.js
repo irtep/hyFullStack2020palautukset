@@ -7,11 +7,21 @@ import ActionButton from './components/ActionButton';
 import UsersList from './components/UsersList';
 import Header from './components/Header';
 import Togglable from './components/Togglable';
+import Menu from './components/Menu';
 import blogTools from './services/blogs';
 import { setUser, logout } from './reducers/usersReducer';
 import { setBlogs } from './reducers/blogReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import {
+  BrowserRouter as Router,
+  //  Switch,
+  Route,
+//  Link,
+//  Redirect,
+//  useRouteMatch,
+//  useHistory,
+} from 'react-router-dom';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -65,15 +75,22 @@ const App = () => {
   };
 
   return (
-    <div>
+    <Router>
+      <Menu/>
       <Notification />
-      {loggedUser === null?
-        showLoginForm() :
-        showBlogs()
-      }
-      <Header name= "Users" />
-      <UsersList />
-    </div>
+      <Route path= "/">
+      </Route>
+      <Route path= "/blogs">
+        {loggedUser === null?
+          showLoginForm() :
+          showBlogs()
+        }
+      </Route>
+      <Route path= "/users">
+        <Header name= "Users" />
+        <UsersList />
+      </Route>
+    </Router>
   );
 };
 
