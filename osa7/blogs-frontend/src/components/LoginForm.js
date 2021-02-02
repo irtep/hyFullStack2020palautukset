@@ -2,7 +2,7 @@ import React from 'react';
 import Header  from './Header';
 //import PropTypes from 'prop-types';
 import { useField } from '../hooks';
-import { login } from '../reducers/usersReducer';
+import { login } from '../reducers/userReducer';
 import { useDispatch } from 'react-redux';
 
 const style = {

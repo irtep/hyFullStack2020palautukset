@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import userTools from '../services/users';
+import React from 'react';
+//import userTools from '../services/users';
+import { Link } from 'react-router-dom';
+//import { useDispatch } from 'react-redux';
+//import { getUsers } from '../reducers/allUsersReducer';
 
 const tableStyle = {
   border: '6px solid navy',
@@ -12,19 +15,32 @@ const cellStyle = {
   padding: '3px'
 };
 
-const UsersList = () => {
+const User = ({ user }) => {
+  return(
+    <>
+      <Link to={`/users/${user.id}`}>
+        {user.name}
+      </Link>
+    </>
+  );
+};
+
+const UsersList = ({ users }) => {
+  console.log('usres ', users);
+  //const users = useSelector( state => state.allUsers);
+  //console.log('users: ', users);
+  /*
   const [ users, setUsers] = useState([{
     name: 'wait',
     id: 'xxxxx',
     notes: []
   }]);
-
-  useEffect( () => {
-    userTools.getAll().then(allUsers => {
-      setUsers(allUsers);
-    }).catch( err => console.log(err));
-    return () => {};
-  }, []);
+  */
+  //  const dispatch = useDispatch();
+  //  useEffect( async () => {
+  //    dispatch(getUsers);
+  //    return () => {};
+  //  }, []);
 
   return (
     <div>
@@ -34,7 +50,7 @@ const UsersList = () => {
         {users.map(user =>
           <tr key= {user.id}>
             <td style= {cellStyle}>
-              {user.name}
+              <User user = {user} />
             </td>
             <td style= {cellStyle}>
               {user.notes.length}
@@ -47,3 +63,9 @@ const UsersList = () => {
 };
 
 export default UsersList;
+/*
+
+  <Route path="/notes/:id">
+    <Note note={note} />
+  </Route>
+*/
