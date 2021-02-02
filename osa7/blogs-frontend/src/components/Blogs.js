@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ActionButton from './ActionButton';
 import { useDispatch,  useSelector } from 'react-redux';
 import { likeThis, deleteThis } from '../reducers/blogReducer';
+import { Link } from 'react-router-dom';
 
 const yellowText = { color: 'yellow' };
 const navyText = { color: 'navy' };
@@ -40,7 +41,9 @@ const Blog = ({ blog }) => {
 
   const showBrief = () => (
     <div>
-      {blog.title}
+      <Link to={`/blogs/${blog.id}`}>
+        {blog.title}
+      </Link>
       <span style= {yellowText}>{blog.author}</span>
       <button onClick= {toggleShow}>show</button>
     </div>

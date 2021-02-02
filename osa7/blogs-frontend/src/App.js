@@ -1,46 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
 import AdderForm from './components/AdderForm';
 import Notification from './components/Notification';
-import ActionButton from './components/ActionButton';
 import UsersList from './components/UsersList';
 import UserDetails from './components/UserDetails';
+import BlogDetails from './components/BlogDetails';
 import Header from './components/Header';
 import Togglable from './components/Togglable';
 import Menu from './components/Menu';
 import blogTools from './services/blogs';
-import userTools from './services/users';
-import { setUser, logout } from './reducers/userReducer';
+import { setUser } from './reducers/userReducer';
 import { setBlogs } from './reducers/blogReducer';
+import { setUsers } from './reducers/allUsersReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  //  Link,
-  //  Redirect,
-//  useRouteMatch,
-//  useHistory,
+  Route
 } from 'react-router-dom';
 
 const App = () => {
-  const [ allUsers, setUsers ] = useState([{
-    name: 'wait',
-    id: 'xxxxx',
-    notes: []
-  }]);
   const dispatch = useDispatch();
   const loggedUser = useSelector( state => state.user );
   const blogFormRef = React.createRef();
 
   useEffect(() => {
     dispatch(setBlogs());
-    // get users list
-    userTools.getAll().then( users => {
-      setUsers(users);
-    });
+    dispatch(setUsers());
   }, []);
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('userDetails');
@@ -51,10 +39,6 @@ const App = () => {
     }
   }, []);
 
-  const logOutUser = () => {
-    dispatch(logout());
-  };
-
   const showLoginForm = () => (
     <LoginForm />
   );
@@ -64,10 +48,6 @@ const App = () => {
       <div>
         <Header name= 'Blogs'/>
         <div>
-          <ActionButton
-            id= "logoutButton"
-            action= { logOutUser }
-            name= "Logout"/>
         </div><br/>
         <Togglable
           button1label= "create new"
@@ -83,14 +63,7 @@ const App = () => {
       </div>
     );
   };
-  /*
-  const match = useRouteMatch('/users/:id');
-  const userDetails = match
-    ? allUsers.find(note => note.id === Number(match.params.id))
-    : null;
-  console.log('match, userDetails', match);
-  console.log('user details', userDetails);
-  */
+
   return (
     <Router>
       <Menu/>
@@ -98,6 +71,9 @@ const App = () => {
       <Switch>
         <Route path="/users/:id">
           <UserDetails />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogDetails />
         </Route>
         <Route path= "/blogs">
           {loggedUser === null?
@@ -107,7 +83,7 @@ const App = () => {
         </Route>
         <Route path= "/users">
           <Header name= "Users" />
-          <UsersList users = {allUsers}/>
+          <UsersList />
         </Route>
         <Route path= "/">
         </Route>
