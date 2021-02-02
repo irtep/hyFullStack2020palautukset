@@ -16,9 +16,7 @@ export const setBlogs = () => {
     });
   };
 };
-export const deleteThis = (blog) => {
-  blog = blog.blog;
-
+export const deleteThis = ({ blog }) => {
   return async dispatch => {
     await blogTools.erase(blog.id);
     dispatch(addNotification({ msg: `deleted blog: ${blog.id}`, badNews: false }, 5));
@@ -29,8 +27,7 @@ export const deleteThis = (blog) => {
   };
 };
 
-export const likeThis = (blog) => {
-  blog = blog.blog;
+export const likeThis = ({ blog }) => {
   const newValue = blog.likes + 1;
   return async dispatch => {
     await  blogTools.update(blog.id, 'likes', newValue);

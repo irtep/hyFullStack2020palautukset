@@ -1,36 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Blogs from './components/Blogs';
 import LoginForm from './components/LoginForm';
 import AdderForm from './components/AdderForm';
 import Notification from './components/Notification';
 import ActionButton from './components/ActionButton';
 import UsersList from './components/UsersList';
+import UserDetails from './components/UserDetails';
 import Header from './components/Header';
 import Togglable from './components/Togglable';
 import Menu from './components/Menu';
 import blogTools from './services/blogs';
-import { setUser, logout } from './reducers/usersReducer';
+import userTools from './services/users';
+import { setUser, logout } from './reducers/userReducer';
 import { setBlogs } from './reducers/blogReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import {
   BrowserRouter as Router,
-  //  Switch,
+  Switch,
   Route,
-//  Link,
-//  Redirect,
+  //  Link,
+  //  Redirect,
 //  useRouteMatch,
 //  useHistory,
 } from 'react-router-dom';
 
 const App = () => {
+  const [ allUsers, setUsers ] = useState([{
+    name: 'wait',
+    id: 'xxxxx',
+    notes: []
+  }]);
   const dispatch = useDispatch();
-  const loggedUser = useSelector( state => state.users );
+  const loggedUser = useSelector( state => state.user );
   const blogFormRef = React.createRef();
 
-  // when app is loaded
   useEffect(() => {
     dispatch(setBlogs());
+    // get users list
+    userTools.getAll().then( users => {
+      setUsers(users);
+    });
   }, []);
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('userDetails');
@@ -53,7 +63,7 @@ const App = () => {
     return(
       <div>
         <Header name= 'Blogs'/>
-        <div>{loggedUser.name} logged in
+        <div>
           <ActionButton
             id= "logoutButton"
             action= { logOutUser }
@@ -73,23 +83,35 @@ const App = () => {
       </div>
     );
   };
-
+  /*
+  const match = useRouteMatch('/users/:id');
+  const userDetails = match
+    ? allUsers.find(note => note.id === Number(match.params.id))
+    : null;
+  console.log('match, userDetails', match);
+  console.log('user details', userDetails);
+  */
   return (
     <Router>
       <Menu/>
       <Notification />
-      <Route path= "/">
-      </Route>
-      <Route path= "/blogs">
-        {loggedUser === null?
-          showLoginForm() :
-          showBlogs()
-        }
-      </Route>
-      <Route path= "/users">
-        <Header name= "Users" />
-        <UsersList />
-      </Route>
+      <Switch>
+        <Route path="/users/:id">
+          <UserDetails />
+        </Route>
+        <Route path= "/blogs">
+          {loggedUser === null?
+            showLoginForm() :
+            showBlogs()
+          }
+        </Route>
+        <Route path= "/users">
+          <Header name= "Users" />
+          <UsersList users = {allUsers}/>
+        </Route>
+        <Route path= "/">
+        </Route>
+      </Switch>
     </Router>
   );
 };

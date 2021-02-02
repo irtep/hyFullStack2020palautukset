@@ -11,7 +11,7 @@ const showMore = {
   border: '5px solid green' };
 
 const Blog = ({ blog }) => {
-  const user = useSelector( state => state.users);
+  const user = useSelector( state => state.user);
   const dispatch = useDispatch();
   const [showBlog, setShow] = useState(true);
   const toggleShow = () => {

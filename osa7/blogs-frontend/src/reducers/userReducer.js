@@ -44,7 +44,7 @@ export const setUser = (user) => {
   };
 };
 
-const usersReducer = ( state = null, action) => {
+const userReducer = ( state = null, action) => {
   switch (action.type) {
   case 'USER':
     return { ...state,
@@ -60,4 +60,4 @@ const usersReducer = ( state = null, action) => {
   }
 };
 
-export default usersReducer;
+export default userReducer;
