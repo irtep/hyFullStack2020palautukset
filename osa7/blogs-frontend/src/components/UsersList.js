@@ -1,8 +1,6 @@
 import React from 'react';
-//import userTools from '../services/users';
 import { Link } from 'react-router-dom';
-//import { useDispatch } from 'react-redux';
-//import { getUsers } from '../reducers/allUsersReducer';
+import { useSelector } from 'react-redux';
 
 const tableStyle = {
   border: '6px solid navy',
@@ -25,23 +23,12 @@ const User = ({ user }) => {
   );
 };
 
-const UsersList = ({ users }) => {
-  console.log('usres ', users);
-  //const users = useSelector( state => state.allUsers);
-  //console.log('users: ', users);
-  /*
-  const [ users, setUsers] = useState([{
-    name: 'wait',
-    id: 'xxxxx',
-    notes: []
-  }]);
-  */
-  //  const dispatch = useDispatch();
-  //  useEffect( async () => {
-  //    dispatch(getUsers);
-  //    return () => {};
-  //  }, []);
-
+const UsersList = () => {
+  const users = useSelector( state => state.allUsers);
+  console.log('users: ', users);
+  if (!users) {
+    return null;
+  }
   return (
     <div>
       <table style= {tableStyle}><tbody>
@@ -63,9 +50,3 @@ const UsersList = ({ users }) => {
 };
 
 export default UsersList;
-/*
-
-  <Route path="/notes/:id">
-    <Note note={note} />
-  </Route>
-*/

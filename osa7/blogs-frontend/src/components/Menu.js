@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import {
-//  BrowserRouter as Router,
-  //  Switch,
-  //  Route,
-  Link,
-//  Redirect,
-//  useRouteMatch,
-//  useHistory,
-} from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import ActionButton from './ActionButton';
+import { logout } from '../reducers/userReducer';
 
 const style = {
   margin: '10px',
@@ -20,24 +14,37 @@ const style = {
 
 
 const Menu = () => {
+  const dispatch = useDispatch();
   const loggedUser = useSelector( state => state.user );
   const [ user, setUser ] = useState(' logged out.');
+  const [ logged, setLogged] = useState(false);
+
+  const logOutUser = () => {
+    dispatch(logout());
+  };
 
   useEffect( () => {
-    console.log('logged user: ', loggedUser);
     if (loggedUser !== null && loggedUser !== undefined) {
       setUser(` ${loggedUser.name} logged in.`);
+      setLogged(true);
     } else {
       setUser(' logged out.');
+      setLogged(false);
     }
     return () => {};
   }, [loggedUser]);
+
 
   return (
     <div style= {style}>
       <Link to= "/blogs"> BLOGS </Link>
       <Link to= "/users"> USERS </Link>
       {user}
+      {logged ?
+        <ActionButton
+          id= "logoutButton"
+          action= { logOutUser }
+          name= "Logout"/> : null}
     </div>
   );
 };
