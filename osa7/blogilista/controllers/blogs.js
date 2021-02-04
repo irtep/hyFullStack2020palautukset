@@ -38,6 +38,19 @@ blogsRouter.post('/', async (req, res) => {
   res.json(savedBlog.toJSON());
 });
 
+// add a comment
+blogsRouter.post('/:id/comments', async (req, res) => {
+  const comment = req.body.comment;
+  // get blog that user wants to edit
+  const blog = await Blog.findById(req.params.id);
+  blog.comments.push(comment);
+  logger.info('blog now: ', blog);
+
+  // make the modification
+  await Blog.findByIdAndUpdate(req.params.id, blog, { new: true });
+  res.json(blog);
+});
+
 // show a blog with certain id
 blogsRouter.get('/:id', async (req, res) => {
   const blog = await Blog.findById(req.params.id);
