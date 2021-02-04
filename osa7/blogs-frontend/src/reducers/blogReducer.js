@@ -40,6 +40,18 @@ export const likeThis = ({ blog }) => {
   };
 };
 
+export const commentThis = ({ blog, newComment }) => {
+  return async dispatch => {
+    await  blogTools.sendComment(newComment, blog.id);
+    blog.comments.push(newComment);
+    dispatch(addNotification({ msg: 'Comment sent, thanks!', badNews: false }, 5));
+    dispatch({
+      type: 'COMMENT',
+      data: blog
+    });
+  };
+};
+
 export const createNew = (data) => {
   return async dispatch => {
     try {
@@ -67,6 +79,8 @@ const blogReducer = ( state = [], action) => {
     return sortByLikes([ ...state, action.data ]);
   case 'INITIATE':
     return sortByLikes(state.concat(action.data));
+  case 'COMMENT':
+    return sortByLikes(state.map(a => a.id === action.data.id ? action.data : a));
   case 'DELETE':
     return sortByLikes(state.filter(blog => blog.id !== action.data.id));
   default: return state;

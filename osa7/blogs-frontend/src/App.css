@@ -14,3 +14,11 @@ button {
 button:hover {
   color: yellow;
 }
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bolder;
+}
+a:hover {
+  color: red;
+}
