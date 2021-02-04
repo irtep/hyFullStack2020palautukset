@@ -18,8 +18,14 @@ const create = async newObject => {
   const config = {
     headers: { Authorization: token },
   };
-
   const res = await axios.post(baseUrl, newObject, config);
+  return res.data;
+};
+
+// comment a blog
+const sendComment = async (comment, id ) => {
+  const data = { comment: comment };
+  const res = await axios.post(`${baseUrl}/${id}/comments`, data);
   return res.data;
 };
 
@@ -39,5 +45,5 @@ const erase = (id) => {
   return req.then(res => res.data);
 };
 
-const blogTools = { getAll, create, setToken, update, erase };
+const blogTools = { getAll, create, setToken, update, erase, sendComment };
 export default blogTools;

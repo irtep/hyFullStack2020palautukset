@@ -17,7 +17,7 @@ const style = {
 const LoginForm = () => {
   const dispatch = useDispatch();
   const username = useField('text', 'username');
-  const password = useField('text', 'password');
+  const password = useField('password', 'password');
 
   const submitAction = (e) => {
     e.preventDefault();

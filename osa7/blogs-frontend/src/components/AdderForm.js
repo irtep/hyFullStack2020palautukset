@@ -18,8 +18,7 @@ const AdderForm = ({ blogFormRef }) => {
   const inputTitle = useField('text', 'inputTitle');
   const author = useField('text', 'author');
   const url = useField('text', 'url');
-  const user = useSelector( state => state.users);
-
+  const user = useSelector( state => state.user);
   // add new blog
   const addNewBlog = (event) => {
     event.preventDefault();
@@ -32,7 +31,9 @@ const AdderForm = ({ blogFormRef }) => {
     };
     dispatch(createNew(newBlog));
   };
-
+  if (!user) {
+    return null;
+  }
   return(
     <div style= { style } >
       <Header name= "create new blog"/>

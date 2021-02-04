@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ActionButton from './ActionButton';
 import { logout } from '../reducers/userReducer';
 
@@ -14,12 +14,14 @@ const style = {
 
 
 const Menu = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const loggedUser = useSelector( state => state.user );
   const [ user, setUser ] = useState(' logged out.');
   const [ logged, setLogged] = useState(false);
 
   const logOutUser = () => {
+    history.push('/blogs/');
     dispatch(logout());
   };
 
@@ -37,6 +39,7 @@ const Menu = () => {
 
   return (
     <div style= {style}>
+      <Link to= "/"> HOME </Link>
       <Link to= "/blogs"> BLOGS </Link>
       <Link to= "/users"> USERS </Link>
       {user}
