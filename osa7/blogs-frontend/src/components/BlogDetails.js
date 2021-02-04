@@ -6,8 +6,12 @@ const goldie = {
   margin: '5px'
 };
 const bigNavy = {
-  fontSize: '110%',
+  fontSize: '130%',
   color: 'navy'
+};
+const commentStyle = {
+  fontFamily: 'cursive',
+  color: 'black'
 };
 
 const BlogDetails = () => {
@@ -28,6 +32,20 @@ const BlogDetails = () => {
       </div>
       <div>
        added by: {detailsOf.user.username}
+      </div>
+      <div>
+        <div style= { goldie }>
+         comments:
+        </div>
+        <ul>
+          {detailsOf.comments.map( str => {
+            if (str !== null) {
+              return <li
+                key= {str}
+                style= {commentStyle}>{str}</li>;
+            }}
+          )}
+        </ul>
       </div>
     </div>
   );

@@ -25,7 +25,6 @@ const User = ({ user }) => {
 
 const UsersList = () => {
   const users = useSelector( state => state.allUsers);
-  console.log('users: ', users);
   if (!users) {
     return null;
   }
