@@ -1,14 +1,3 @@
-/*
-If you would call the function with parameters [3, 0, 2, 4.5, 0, 3, 1] and 2 it could return
-
-{ periodLength: 7,
-  trainingDays: 5,
-  success: false,
-  rating: 2,
-  ratingDescription: 'not too bad but could be better',
-  target: 2,
-  average: 1.9285714285714286 }
-*/
 
 interface Values {
   periodLength: number;
@@ -21,9 +10,6 @@ interface Values {
 };
 
 const exerciseHours = (summary: Array<number>, target: number): Values => {
-  console.log('summary: ', summary);
-  console.log('type of: ', typeof(summary[1]));
-  console.log('s-R: ', summary.reduce( (total, num) => total + num ));
   const results = {
     target: target,
     periodLength: summary.length,
@@ -50,23 +36,22 @@ const exerciseHours = (summary: Array<number>, target: number): Values => {
   return results;
 };
 
-//console.log('big week: ', exerciseHours([3, 3, 3, 3, 3, 3, 3], 2));
-//console.log('normal week: ', exerciseHours([3, 1, 2, 3, 1, 2, 2], 2));
-//console.log('bad week: ', exerciseHours([0, 0, 2, 0, 3], 2));
 const parseArguments = ( args: any ) => {
+  const newArr = [...args].slice(3).map( n => parseInt(n));
+  const newInt = parseInt(args[2]);
   if (args.length < 4) {throw new Error(
     'usage: npm run calculateExercises target day1. (min 1 day)');
   } else {
     return {
-      val1: args[3],
-      val2: [...args].slice(2)
+      val1: newInt,
+      val2: newArr
     };
   }
 };
 
 try {
-  const { val1, val2 } = parseArguments(process.argv);
+  let { val1, val2 } = parseArguments(process.argv);
   exerciseHours(val2, val1);
-} catch {
-  console.log('error', Error);
+} catch (e) {
+  console.log('error', e.message);
 }
