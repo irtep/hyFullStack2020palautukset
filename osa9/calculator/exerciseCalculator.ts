@@ -7,7 +7,7 @@ interface Values {
   ratingDescription: string;
   target: number;
   average: number;
-};
+}
 
 const exerciseHours = (summary: Array<number>, target: number): Values => {
   const results = {
@@ -35,7 +35,7 @@ const exerciseHours = (summary: Array<number>, target: number): Values => {
   console.log(results);
   return results;
 };
-
+/*
 const parseArguments = ( args: any ) => {
   const newArr = [...args].slice(3).map( n => parseInt(n));
   const newInt = parseInt(args[2]);
@@ -48,10 +48,13 @@ const parseArguments = ( args: any ) => {
     };
   }
 };
-
-try {
-  let { val1, val2 } = parseArguments(process.argv);
-  exerciseHours(val2, val1);
-} catch (e) {
-  console.log('error', e.message);
+*/
+export const calcExes = (val1: number, val2: Array<number>) => {
+  let resp = null;
+  try {
+    resp = exerciseHours(val2, val1);
+  } catch (e) {
+    console.log('error', e.message);
+  }
+  return resp;
 }

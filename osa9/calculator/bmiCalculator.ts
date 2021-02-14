@@ -6,19 +6,19 @@ const calculateBmi = (height: number, weight: number): string => {
   }
   if (bmi < 25) {
     response = 'healthy weight';
-  };
+  }
   if (bmi < 18.5) {
     response = 'underweight';
-  };
+  }
   return response;
 };
 
-export const calcBmi = (weight: number, height: number) => {
+export const calcBmi = (weight: number, height: number): string => {
   let newVal = 'error';
   try {
     newVal = calculateBmi(height, weight);
   } catch (e) {
-    console.log('error', e.message);
+    console.log(e);
   }
   return newVal;
 };
