@@ -1,10 +1,36 @@
-type Gender = 'Male' | 'Female' | 'Other';
+type Gender = 'male' | 'female' | 'other';
+
+export interface Diagnose {
+  code: string,
+  name: string,
+  latin?: string
+};
 
 export interface Customer {
-  id: number,
+  id: string,
   name: string,
   gender: Gender,
-  occupation: string
+  occupation: string,
+  dateOfBirth: string,
+  ssn: string
 };
-// if need to set some type field optional, just add ?
-// for example: occupation?: string
+
+export type CustomersNoSsn = Omit<Customer, 'ssn'>;
+
+/*
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type TodoPreview = Omit<Todo, "description">;
+
+const todo: TodoPreview = {
+  title: "Clean room",
+  completed: false,
+};
+
+todo;
+// ^ = const todo: TodoPreview
+*/
