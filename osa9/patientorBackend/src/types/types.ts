@@ -1,4 +1,8 @@
-type Gender = 'male' | 'female' | 'other';
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+  Other = 'other'
+};
 
 export interface Diagnose {
   code: string,
@@ -16,6 +20,7 @@ export interface Customer {
 };
 
 export type CustomersNoSsn = Omit<Customer, 'ssn'>;
+export type NewCustomer = Omit<Customer, 'id'>;
 
 /*
 interface Todo {
