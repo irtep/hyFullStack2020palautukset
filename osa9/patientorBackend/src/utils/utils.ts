@@ -30,7 +30,8 @@ const toNewCustomerEntry = (object: any): NewCustomer => {
     ssn: parseString(object.ssn),
     dateOfBirth: parseString(object.dateOfBirth),
     gender: parseGender(object.gender),
-    occupation: parseString(object.occupation)
+    occupation: parseString(object.occupation),
+    entries: []
   };
 };
 

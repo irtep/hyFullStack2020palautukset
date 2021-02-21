@@ -17,4 +17,7 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
+  entries: Array<any>
 }
+
+export type GetPatient = Patient | undefined; 
