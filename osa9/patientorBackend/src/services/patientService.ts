@@ -7,20 +7,16 @@ import { CustomersNoSsn, NewCustomer, Customer } from '../types/types';
 
 // gets all without ssn number
 const getEntries = (): CustomersNoSsn[] => {
-  return customers.map(({ id, name, dateOfBirth, gender, occupation}) => ({
-    id, name, dateOfBirth, gender, occupation,
+  return customers.map(({ id, name, dateOfBirth, gender, occupation, entries}) => ({
+    id, name, dateOfBirth, gender, occupation, entries
   }));
 };
-/*
 
-"id": "d2773336-f723-11e9-8f0b-362b9e155667",
-"name": "John McClane",
-"dateOfBirth": "1986-07-09",
-"ssn": "090786-122X",
-"gender": "male",
-"occupation": "New york city cop"
-name, ssn, dateOfBirth, gender, occupation
-*/
+const findPatient = (patientID: string): Customer | undefined => {
+  console.log('trying to find patient: ', patientID);
+  return customers.find(p => p.id === patientID);
+};
+
 const addEntry = (newEntry: NewCustomer): Customer => {
   const newCusto = {
     id: JSON.stringify(Math.random()*(6000 - 1)),
@@ -31,22 +27,6 @@ const addEntry = (newEntry: NewCustomer): Customer => {
 };
 export default {
   getEntries,
-  addEntry
+  addEntry,
+  findPatient
 };
-/*
-const addDiary = (
-    date: string, weather: Weather, visibility: Visibility, comment: string
-  ): DiaryEntry => {
-
-  const newDiaryEntry = {
-    id: Math.max(...diaries.map(d => d.id)) + 1,
-    date,
-    weather,
-    visibility,
-    comment,
-  }
-
-  diaries.push(newDiaryEntry);
-  return newDiaryEntry;
-};
-*/

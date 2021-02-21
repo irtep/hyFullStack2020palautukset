@@ -4,6 +4,10 @@ export enum Gender {
   Other = 'other'
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Entry {
+};
+
 export interface Diagnose {
   code: string,
   name: string,
@@ -16,26 +20,9 @@ export interface Customer {
   gender: Gender,
   occupation: string,
   dateOfBirth: string,
-  ssn: string
+  ssn: string,
+  entries: Entry[]
 };
 
 export type CustomersNoSsn = Omit<Customer, 'ssn'>;
 export type NewCustomer = Omit<Customer, 'id'>;
-
-/*
-interface Todo {
-  title: string;
-  description: string;
-  completed: boolean;
-}
-
-type TodoPreview = Omit<Todo, "description">;
-
-const todo: TodoPreview = {
-  title: "Clean room",
-  completed: false,
-};
-
-todo;
-// ^ = const todo: TodoPreview
-*/
