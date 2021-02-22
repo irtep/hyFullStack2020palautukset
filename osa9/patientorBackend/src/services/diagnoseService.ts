@@ -8,14 +8,7 @@ import { Diagnose } from '../types/types';
 const getEntries = (): Array<Diagnose> => {
   return diagnoses;
 };
-/*
-const addEntry = (newEntry: Customer) => {
-  newEntry.id = db.length + 1;
-  db.push(newEntry);
-  return newEntry;
-};
-*/
+
 export default {
-  getEntries,
-//  addEntry
+  getEntries
 };
