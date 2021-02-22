@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useReducer } from "react";
-import { GetPatient, Patient } from "../types";
+import { GetPatient, Patient, Diagnosis } from "../types";
 
 import { Action } from "./reducer";
 
 export type State = {
   patients: { [id: string]: Patient };
-  showing: GetPatient | undefined
+  showing: GetPatient | undefined,
+  diagnoses: Array<Diagnosis>
 };
 
 const initialState: State = {
   patients: {},
-  showing: undefined
+  showing: undefined,
+  diagnoses: []
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
