@@ -1,5 +1,10 @@
 import { customers } from '../../data/db';
-import { CustomersNoSsn, NewCustomer, Customer } from '../types/types';
+import {
+  CustomersNoSsn,
+  NewCustomer,
+  Customer,
+  Entry
+} from '../types/types';
 
 // this would be an emergency solution, for example if couldnt export
 // it from .ts file as it is now.. well you know...
@@ -17,7 +22,7 @@ const findPatient = (patientID: string): Customer | undefined => {
   return customers.find(p => p.id === patientID);
 };
 
-const addEntry = (newEntry: NewCustomer): Customer => {
+const addNewCustomer = (newEntry: NewCustomer): Customer => {
   const newCusto = {
     id: JSON.stringify(Math.random()*(6000 - 1)),
     ...newEntry
@@ -25,8 +30,20 @@ const addEntry = (newEntry: NewCustomer): Customer => {
   customers.push(newCusto);
   return newCusto;
 };
+
+const addEntry = (patientID: string, entry: Entry): Customer => {
+  const patient = findPatient(patientID);
+  if (patient === undefined) {
+    throw new Error('Patient not found...');
+  } else {
+    patient.entries = patient.entries.concat(entry);
+    return patient;
+  }
+};
+
 export default {
   getEntries,
-  addEntry,
-  findPatient
+  addNewCustomer,
+  findPatient,
+  addEntry
 };
