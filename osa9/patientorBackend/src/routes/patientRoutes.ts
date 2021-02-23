@@ -1,7 +1,7 @@
 import express from 'express';
 import patientServices from '../services/patientService';
-import toNewCustomerEntry from "../utils/utils";
-import { Customer } from '../types/types';
+import utilTools from "../utils/utils";
+import { Customer, Entry } from '../types/types';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
@@ -22,9 +22,9 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   //const { name, ssn, dateOfBirth, gender, occupation } = req.body;
-  try{
-    const incoming = toNewCustomerEntry(req.body);
-    const adding = patientServices.addEntry(incoming);
+  try {
+    const incoming = utilTools.toNewCustomerEntry(req.body);
+    const adding = patientServices.addNewCustomer(incoming);
     res.json(adding);
   } catch (e) {
     res.status(400).send(e.message);
@@ -32,4 +32,15 @@ router.post('/', (req, res) => {
 //  const adding = patientServices.addEntry(req.body);
 });
 
+router.post('/:id/entries', (req, res) => {
+  const id = req.params.id;
+  try {
+    const incoming: Entry = utilTools.newEntryCheck(req.body);
+    const adding: Customer = patientServices.addEntry(id, incoming);
+    res.json(adding);
+  } catch (e){
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        res.status(400).send(e.message);
+    }
+});
 export default router;

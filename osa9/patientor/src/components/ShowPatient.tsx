@@ -123,7 +123,7 @@ const Entries: React.FC<{entriex: Entry[]}> = ({entriex}) => {
           return <HealthCheckEntry key={entry.id} entry={entry} />;
         case 'OccupationalHealthcare':
           return <OccupationalHealthC key={entry.id} entry={entry} />;
-       default: assertNever(entry);
+       default: return assertNever(entry);
       };
     })}
     </>
