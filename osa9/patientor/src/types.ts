@@ -28,17 +28,22 @@ export interface HealthCheck extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
+// urgh, i would really need only one of these 3..
 export interface Diagnosis {
     code: string;
     name: string;
     latin?: string;
 }
-
 export interface Diagnose {
     code: string;
     name: string;
     latin?: string;
 }
+export interface Diagnose {
+  code: string,
+  name: string,
+  latin?: string
+};
 
 export enum HealthCheckRating {
   "Healthy" = 0,
@@ -46,12 +51,6 @@ export enum HealthCheckRating {
   "HighRisk" = 2,
   "CriticalRisk" = 3
 }
-
-export interface Diagnose {
-  code: string,
-  name: string,
-  latin?: string
-};
 
 export interface Discharged {
   date: string,
